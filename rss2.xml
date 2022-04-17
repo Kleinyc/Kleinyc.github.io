@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>愚者之证</title>
+    <link>https://github.com/Kleinyc/Kleinyc.github.io/</link>
+    
+    <atom:link href="https://github.com/Kleinyc/Kleinyc.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
+    
+    <description>长夜，不止有星辰，还有余火，一直在那。</description>
+    <pubDate>Sun, 17 Apr 2022 15:30:06 GMT</pubDate>
+    <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>与卿共勉书</title>
+      <link>https://github.com/Kleinyc/Kleinyc.github.io/2022/04/17/hello-world/</link>
+      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2022/04/17/hello-world/</guid>
+      <pubDate>Sun, 17 Apr 2022 13:13:58 GMT</pubDate>
+      
+        
+        
+      <description>&lt;p&gt;壬寅虎年，春分已过，昼长夜短，日渐奔忙。三月将逝，玄鸟又归，四阳渐盛，阴阳薄雷。春耕忙田，良人纸鸢，雨后丰年，平安每天。&lt;/p&gt;
+&lt;p&gt;与阳同起，红旗相迎，伴月西归，前行不停。四年即末，知有课枯燥无味；身居庠序，见有师别具一格。今夜抒怀，感概良多。各地穿梭来往，见未所见，闻</description>
+        
+      
+      
+      
+      <content:encoded><![CDATA[<p>壬寅虎年，春分已过，昼长夜短，日渐奔忙。三月将逝，玄鸟又归，四阳渐盛，阴阳薄雷。春耕忙田，良人纸鸢，雨后丰年，平安每天。</p><p>与阳同起，红旗相迎，伴月西归，前行不停。四年即末，知有课枯燥无味；身居庠序，见有师别具一格。今夜抒怀，感概良多。各地穿梭来往，见未所见，闻未所闻，自学登堂，慢慢成长。</p><p>晨来日见，暮至月回，天高云淡，鹰啼高飞。百年已至，拼搏之时。铭记责任，求真务实，海纳百川，自强不息。肩负使命，不负重托，承先辈“规格严格”之训，做当代“功夫到家”之人。</p><p>莘莘学子，恭勤不倦，春夜茫茫，书山跋涉。求学之人，汲知之子，不拒小流，不让细壤。愿承先辈之志，望明大千法理。秋夜已深，笔辍于此，吾意于文，共勉与卿。</p>]]></content:encoded>
+      
+      
+      
+      
+      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/04/17/hello-world/#disqus_thread</comments>
+      
+    </item>
+    
+  </channel>
+</rss>
