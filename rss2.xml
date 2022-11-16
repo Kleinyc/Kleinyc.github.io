@@ -9,8 +9,33 @@
     <atom:link href="https://github.com/Kleinyc/Kleinyc.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>长夜，不止有星辰，还有余火，一直在那。</description>
-    <pubDate>Wed, 16 Nov 2022 02:51:17 GMT</pubDate>
+    <pubDate>Wed, 16 Nov 2022 07:00:44 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>饮食数据爬取与匹配——以某健康项目为例</title>
+      <link>https://github.com/Kleinyc/Kleinyc.github.io/2022/11/16/%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96/</link>
+      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2022/11/16/%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96/</guid>
+      <pubDate>Wed, 16 Nov 2022 06:23:05 GMT</pubDate>
+      
+      <description>&lt;hr&gt;
+&lt;h2 id=&quot;过往总结&quot;&gt;&lt;a href=&quot;#过往总结&quot; class=&quot;headerlink&quot; title=&quot;过往总结&quot;&gt;&lt;/a&gt;过往总结&lt;/h2&gt;&lt;p&gt;在做本次项目时，发现之前Never Ending Language Leaning这一目标有点太远，其前提条件应该是数据的充足性和准确性。同时数据的充足性和准确性本身就能为项目做出很好贡献，所以Never Ending 的结果是优化。其次，通过模型来进行数据获取，现阶段网上比较好的项目或者比赛，利用其模型并不能很好的适配到我们的知识中，需要清洗的力度很大，所以这一部分最好先放一下，评估一下可行性。&lt;/p&gt;
+&lt;h2 id=&quot;数据获取另一思路：追求数据本身（Find-amp-amp-Spider-amp-amp-Match-amp-amp-Hand）&quot;&gt;&lt;a href=&quot;#数据获取另一思路：追求数据本身（Find-amp-amp-Spider-amp-amp-Match-amp-amp-Hand）&quot; class=&quot;headerlink&quot; title=&quot;数据获取另一思路：追求数据本身（Find &amp;amp;&amp;amp; Spider &amp;amp;&amp;amp; Match &amp;amp;&amp;amp; Hand）&quot;&gt;&lt;/a&gt;数据获取另一思路：追求数据本身（Find &amp;amp;&amp;amp; Spider &amp;amp;&amp;amp; Match &amp;amp;&amp;amp; Hand）&lt;/h2&gt;</description>
+      
+      
+      
+      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><h2 id="过往总结"><a href="#过往总结" class="headerlink" title="过往总结"></a>过往总结</h2><p>在做本次项目时，发现之前Never Ending Language Leaning这一目标有点太远，其前提条件应该是数据的充足性和准确性。同时数据的充足性和准确性本身就能为项目做出很好贡献，所以Never Ending 的结果是优化。其次，通过模型来进行数据获取，现阶段网上比较好的项目或者比赛，利用其模型并不能很好的适配到我们的知识中，需要清洗的力度很大，所以这一部分最好先放一下，评估一下可行性。</p><h2 id="数据获取另一思路：追求数据本身（Find-amp-amp-Spider-amp-amp-Match-amp-amp-Hand）"><a href="#数据获取另一思路：追求数据本身（Find-amp-amp-Spider-amp-amp-Match-amp-amp-Hand）" class="headerlink" title="数据获取另一思路：追求数据本身（Find &amp;&amp; Spider &amp;&amp; Match &amp;&amp; Hand）"></a>数据获取另一思路：追求数据本身（Find &amp;&amp; Spider &amp;&amp; Match &amp;&amp; Hand）</h2><span id="more"></span><h3 id="1、找数据（Find）"><a href="#1、找数据（Find）" class="headerlink" title="1、找数据（Find）"></a>1、找数据（Find）</h3><p>一方面我们要找可以爬取的数据，但以薄荷健康为例，食物&#x2F;食材的数据只能展现百条左右（每类），这些能够使用，但是还远远不够。同时，薄荷健康背后的数据库是很大的，我们得首先去建立一个需要爬取的list，这样获取的数据是充分的。</p><p>那如何找数据呢，还是进行爬取吗？一方面确实可以这样做，但是我们在爬取的过程中，总会遇到各种各样的问题，合适的网页并不是那么容易寻找，很多我们需要的数据是缺失的。加上一些合规性问题，想要获取到一些准确的信息去深挖网页这样是不合适的。所以应该首先去寻找一些公开数据，在做本次项目时，我们就碰到了，做了很久，找的还是以食材数据为主，这部分在慢病项目中也有所体现。基于食材的热量和类别选择是我们推荐过程中的底层逻辑，但是实际推荐时，我们还是需要去推荐食谱——某一道菜，而非单一的食材。</p><p>综上，找数据不是容易的，但仍然是可以找到的。网络资源中有一些公开数据，本次寻找食谱的时候，就找到了一批很优质的公开数据。</p><center><a href="https://sm.ms/image/YoWGNw3VKstq19z" target="_blank"><img src="https://s2.loli.net/2022/11/16/YoWGNw3VKstq19z.png"></a></center><p>这个数据是某数据库中找到的，一共十几万种食物或菜谱，有配料信息，同时标签和提示中的信息有属于哪种菜、是主食还是小吃、适合产妇、适合老人等，这些信息可以在清洗后，做出很好的推荐。此数据信息很足，应该是我们做项目时就刚开始搜集信息时就需要发现的，而到上周才发现，就说明了查数据是我们之前一直忽视的一个环节。</p><p>在找数据时，还找到了早餐\午餐\晚餐数据。在针对不需要个性化推荐的健康人群，我们完全可以根据这种早午晚餐的表格，匹配量、功效、口味等直接推荐。所以在做项目时，我们寻找数据时应该始终想着网上可能会有一些不错的数据可以直接供我们使用。</p><center><a href="https://sm.ms/image/fSlZudEXPk8yGg4" target="_blank"><img src="https://s2.loli.net/2022/11/16/fSlZudEXPk8yGg4.png"></a></center><font color="LightSeaGreen"><p><strong>最后提醒一下，部分公开数据是不允许直接进行商业使用的，我们需要进一步清洗转换成其他适合我们使用的数据结构。</strong></p></font><h3 id="2、爬数据-Spider"><a href="#2、爬数据-Spider" class="headerlink" title="2、爬数据(Spider)"></a>2、爬数据(Spider)</h3><p>爬数据是一个老生常谈的问题，爬数据其实没有太多好说的，需要注意数据的简介明了，减少后续清洗。本次数据爬取主要是获取了热量信息，这方面的数据是完整的，但是在主料方面，存在许多菜的主料是找不到的，这个我们其实不需要太关心，因为数据量足够大，这部分完全可以选择性忽略，因为有些菜是很难做的，我们后续需要补充的数据是一些常见的食谱，这些其实占据了推荐的主流，要充分考虑，是否需要给菜谱进行常见的等级分类，推荐时给予不同的权重。</p><center><a href="https://sm.ms/image/uSqizjf4IPbt5pc" target="_blank"><img src="https://s2.loli.net/2022/11/16/uSqizjf4IPbt5pc.png"></a><p><a href="https://sm.ms/image/R6p82iZAm3oyUnV" target="_blank"><img src="https://s2.loli.net/2022/11/16/R6p82iZAm3oyUnV.png"></a></p></center><h3 id="3、数据匹配-Match"><a href="#3、数据匹配-Match" class="headerlink" title="3、数据匹配(Match)"></a>3、数据匹配(Match)</h3><p>说明一下上面已经找到食谱了为什么还要去爬数据，主要是我们需要的信息包括了菜名、热量（可能需要）、主料和主料的使用量，让我们的构建的食谱先与薄荷健康进行匹配。<br>我们在上面找到了食谱和食材的数据，推荐的是食谱，计算的原理依靠的是食材，这个时候就需要把两个表联系起来，如何连就是数据匹配的问题。两个数据之间，我们主要依靠的食材的关联，即菜中的主料与食材数据进行匹配，同时获取其他关键词。匹配结果我们保存为json格式（很多食谱推荐的数据都保存在json中）。</p><center><a href="https://sm.ms/image/3uoV2igXD1ZB9bn" target="_blank"><img src="https://s2.loli.net/2022/11/16/3uoV2igXD1ZB9bn.png"></a></center><p>我们起初设计了这样的结构，匹配后，我们需要的数据都可以很清晰的呈现。</p><center><a href="https://sm.ms/image/Kk2JVNGdHOfUIeZ" target="_blank"><img src="https://s2.loli.net/2022/11/16/Kk2JVNGdHOfUIeZ.png"></a></center><p>在匹配的过程中，我们也遇到了一些问题，包括食材库不足，需要进一步扩充，初始使用的食谱数据，数据相对还有一些脏数据，需要前处理，但整体还是很不错的，这部分需要根据规则进一步进行修改。</p><p>最后的格式如下：</p><center><a href="https://sm.ms/image/gZ7GQOaNiBufJ5P" target="_blank"><img src="https://s2.loli.net/2022/11/16/gZ7GQOaNiBufJ5P.png"></a></center><h3 id="4、手动处理（Hand）"><a href="#4、手动处理（Hand）" class="headerlink" title="4、手动处理（Hand）"></a>4、手动处理（Hand）</h3><p>这些自动化的方法，总是会出现各种各样的脏数据，我们需要进一步根据实际情况进行清洗。</p><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>综上所述，我们在数据获取的过程中，不能过分关注模型，模型的训练也是依靠数据的，唯有先在数据本身上面做文章，才可以进一步构建我们需要的数据关系、属性等。</p>]]></content:encoded>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/">大学</category>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
+      
+      
+      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/11/16/%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96/#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>村上-自由、青春、改变、思考</title>
