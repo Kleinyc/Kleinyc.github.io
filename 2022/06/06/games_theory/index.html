@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Kleinyc.github.io/images/apple-touch-icon-taluo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Kleinyc.github.io/images/taluo-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Kleinyc.github.io/images/taluo-16-16.png">
+  <link rel="mask-icon" href="/Kleinyc.github.io/images/taluo.svg" color="#222">
+
+<link rel="stylesheet" href="/Kleinyc.github.io/css/main.css">
+
+
+<link rel="stylesheet" href="/Kleinyc.github.io/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/Kleinyc.github.io/lib/pace/pace-theme-minimal.min.css">
+  <script src="/Kleinyc.github.io/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"github.com","root":"/Kleinyc.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="1前言1.1反恐精英《反恐精英》是一款基于目标的多人第一人称射击游戏。两个对立的团队-恐怖分子和反恐精英,在游戏模式中竞争完成目标，例如确保放置或拆除炸弹的位置。在每个回合结束时，玩家会根据自己的个人表现获得游戏内货币奖励，以便在后续回合中花费在更强大的武器上。赢得回合比失败会带来更多的钱，完成杀死敌方玩家等目标可以获得现金奖励。  在博弈论术语中，CS：GO是一个由16到30个子游戏组成的随机">
+<meta property="og:type" content="article">
+<meta property="og:title" content="反恐精英与博弈论：建模与统计分析">
+<meta property="og:url" content="https://github.com/Kleinyc/Kleinyc.github.io/2022/06/06/games_theory/index.html">
+<meta property="og:site_name" content="愚者之证">
+<meta property="og:description" content="1前言1.1反恐精英《反恐精英》是一款基于目标的多人第一人称射击游戏。两个对立的团队-恐怖分子和反恐精英,在游戏模式中竞争完成目标，例如确保放置或拆除炸弹的位置。在每个回合结束时，玩家会根据自己的个人表现获得游戏内货币奖励，以便在后续回合中花费在更强大的武器上。赢得回合比失败会带来更多的钱，完成杀死敌方玩家等目标可以获得现金奖励。  在博弈论术语中，CS：GO是一个由16到30个子游戏组成的随机">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/11/28/LG9Jv1moKcM7khT.jpg">
+<meta property="og:image" content="https://s2.loli.net/2022/11/28/Ii67sxq2NBrjSQY.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/28/JMCL8fpbqOuIg1G.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/28/f6mPzatKRUGNZQX.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/28/k3JU7OzlYQr1bTI.png">
+<meta property="article:published_time" content="2022-06-06T06:23:05.000Z">
+<meta property="article:modified_time" content="2022-11-28T15:59:57.218Z">
+<meta property="article:author" content="Klein">
+<meta property="article:tag" content="技术篇">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/11/28/LG9Jv1moKcM7khT.jpg">
+
+<link rel="canonical" href="https://github.com/Kleinyc/Kleinyc.github.io/2022/06/06/games_theory/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>反恐精英与博弈论：建模与统计分析 | 愚者之证</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Kleinyc.github.io/rss2.xml" title="愚者之证" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+		<a href="https://github.com/Kleinyc" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Kleinyc.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">愚者之证</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Kleinyc.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Kleinyc.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/Kleinyc.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/Kleinyc.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/Kleinyc.github.io/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/Kleinyc.github.io/resources/" rel="section"><i class="fa fa-download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/Kleinyc/Kleinyc.github.io/2022/06/06/games_theory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Kleinyc.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Klein">
+      <meta itemprop="description" content="长夜，不止有星辰，还有余火，一直在那。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="愚者之证">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          反恐精英与博弈论：建模与统计分析
+        </h1>
+
+        <div class="post-meta">
+			
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-06 14:23:05" itemprop="dateCreated datePublished" datetime="2022-06-06T14:23:05+08:00">2022-06-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-28 23:59:57" itemprop="dateModified" datetime="2022-11-28T23:59:57+08:00">2022-11-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">大学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="1前言"><a href="#1前言" class="headerlink" title="1前言"></a>1前言</h2><h3 id="1-1反恐精英"><a href="#1-1反恐精英" class="headerlink" title="1.1反恐精英"></a>1.1反恐精英</h3><p>《反恐精英》是一款基于目标的多人第一人称射击游戏。两个对立的团队-恐怖分子和反恐精英,在游戏模式中竞争完成目标，例如确保放置或拆除炸弹的位置。在每个回合结束时，玩家会根据自己的个人表现获得游戏内货币奖励，以便在后续回合中花费在更强大的武器上。赢得回合比失败会带来更多的钱，完成杀死敌方玩家等目标可以获得现金奖励。 </p>
+<p>在博弈论术语中，CS：GO是一个由16到30个子游戏组成的随机游戏。从一轮传递到下一轮的唯一参数是每个团队的净资产。由于这些轮次既是离散的又是随机的，因此这个问题是马尔可夫链的一个例子。</p>
+<p>该游戏不仅非常受休闲游戏玩家的欢迎，而且作为一项电子竞技游戏也具有巨大的吸引力。正如网站E-Sports Earnings所指出的那样：自2012年CS：GO发布以来，总奖金池总计超过6,800，000.00美元，仅次于DOTA 2。</p>
+<p>预测比赛结果对博彩公司和博彩玩家来说都是一项有利可图的业务，CS：GO也不例外。根据《华盛顿邮报》援引的一份报告，2018年全球电子竞技博彩总额预计将达到近70亿美元。</p>
+<h3 id="1-2目标"><a href="#1-2目标" class="headerlink" title="1.2目标"></a>1.2目标</h3><p>本报告旨在通过使用统计分析和预测模型的创建来探索和分析CS：GO。我们将使用自建的持久性模型，同时可以考虑借用Python的Scikit-Learn包中包含的一些分类模型，但这点根据具体情况进行安排。在整个过程中，我将测试假设并简要讨论每个结果的重要性。</p>
+<h3 id="1-3我们的数据"><a href="#1-3我们的数据" class="headerlink" title="1.3我们的数据"></a>1.3我们的数据</h3><p>我们的数据“esea_meta_demos.part1”是从在线数据集提供商Kaggle下载的。数据是通过解析“演示”，在线提供的比赛的数字娱乐，这些非常适合建模，因为它们包含有关游戏状态的所有重要信息，并且持续更新。</p>
+<span id="more"></span>
+
+<h2 id="2-CS：GO-游戏内经济入门"><a href="#2-CS：GO-游戏内经济入门" class="headerlink" title="2 CS：GO 游戏内经济入门"></a>2 CS：GO 游戏内经济入门</h2><p>在回合开始时，玩家有机会购买武器和装备。正如人们所预料的那样，更昂贵的武器和装备通常更强大，并且会给玩家带来游戏内优势。我们稍后将以图形方式观察这种效果。</p>
+<p>团队在一轮中购买的装备和武器被昵称为“购买”，并由团队协调，以最大化其预期价值（即赢得的回合）。至关重要的是，团队并不总是花费最大的金额，因为这并不总是最有效的长期政策。</p>
+<p>第一轮（任何一半，以下简称）从平衡的经济开始。每个玩家将获得固定金额的现金，用于武器和装备。现金价值极其有限，以至于玩家只能买得起手枪和&#x2F;或有限的装备，因此，这一轮被称为“手枪弹”。</p>
+<p>手枪弹之后的子弹往往基本上是单面的。这是游戏经济机制的结果，允许一个团队基本上购买比对手更强大的武器和装备阵列。<br>在一支球队赢得一轮比赛后，他们有很短的时间从倒下的队友&#x2F;对手的身体中清除更好的装备。（因此，赢得一轮没有静态的经济“奖励”）</p>
+ <center>
+表1：数据示例
+
+<p><a href="https://smms.app/image/LG9Jv1moKcM7khT" target="_blank"><img src="https://s2.loli.net/2022/11/28/LG9Jv1moKcM7khT.jpg"></a></p>
+</center>
+因为《反恐精英》是一款不对称的游戏，所以每张地图通常会在某种程度上偏袒一方。我们需要看看哪张地图最“平衡”也就是说，CT或T方的胜率最接近于没有差异的地图。
+
+<p>通过对比发现，最平衡的地图是幻影！</p>
+<p>由于每张地图都鼓励不同的游戏风格和策略，因此对趋势的任何分析通常都依赖于地图。因此，我们将使用在“幻影”的比赛中收集的数据。在可能的情况下，我将 map 作为函数参数包括在内。</p>
+<h2 id="3建模"><a href="#3建模" class="headerlink" title="3建模"></a>3建模</h2><h3 id="3-1定义目标变量。"><a href="#3-1定义目标变量。" class="headerlink" title="3.1定义目标变量。"></a>3.1定义目标变量。</h3><p>我们希望预测一轮的获胜者，因为我们可以访问有关游戏的数据，直到该回合开始。因此，我们的目标变量是谁赢得了回合，在我们的.csv文件中定义为“winner_side”列。我们可以使用的最简单技术模型是持久性模型。也称为朴素预测或随机游走预测的持久性模型是用于预测时间序列数据的简单模型。</p>
+<h3 id="3-2持久性模型"><a href="#3-2持久性模型" class="headerlink" title="3.2持久性模型"></a>3.2持久性模型</h3><p>“鉴于一轮的结果与前一轮的结果相关联，该模型预测回合n + 1的结果与第n轮的结果相同。测试后续模型有用性的一种方法是，看看它是否能比持久性模型更好地预测回合的结果。从这个意义上说，我们使用持久性模型 （PM） 作为我们的基本模型。</p>
+<h4 id="3-2-1假设1："><a href="#3-2-1假设1：" class="headerlink" title="3.2.1假设1："></a>3.2.1假设1：</h4><p>持久性模型在游戏的每半部分将具有不同的分类准确性。</p>
+<p>做此假设的原因：</p>
+<p>随着游戏的进行，倾斜（挫败感）和精神疲劳等心理影响对玩家的影响会更糟。因此，输掉一轮比赛可能会对球队在半场结束后的士气产生比前半场比赛更显著的负面影响。如果这个假设是正确的，在没有其他影响的情况下，我们会观察到PM在中场休息后的比赛中会有更高的准确性。也就是说，输掉一轮对下一轮结果的影响，在比赛后期被失利的心理方面夸大了。</p>
+<h4 id="3-2-2假设2"><a href="#3-2-2假设2" class="headerlink" title="3.2.2假设2"></a>3.2.2假设2</h4><p>技术比价低的队员对失利变得更加沮丧，并经历上述心理影响的程度明显高于职业或半职业球员，后者将能够保持冷静的头脑。</p>
+<p>人们可以测试PM在评分较低的队员中是否比职业选手表现得更好。如果这个假设是正确的，人们会观察到随着评级范围的增加，可预测性逐渐下降。</p>
+<h3 id="3-3测试"><a href="#3-3测试" class="headerlink" title="3.3测试"></a>3.3测试</h3><p>对于数据帧中的每一行，模型需要评估并执行以下几项操作：</p>
+<p>1）这是一个新的匹配吗？</p>
+<p>2）这一轮是比赛的下半场还是上半场？ </p>
+<p>3）本轮结果的模型预测，“prevresult”是否等于None？</p>
+<p>4）是否是第15轮（上半场的最后一轮）</p>
+<h3 id="3-4测试结果"><a href="#3-4测试结果" class="headerlink" title="3.4测试结果"></a>3.4测试结果</h3><p>持久性模型似乎在两个半场中大致准确地进行了分类（&lt;1%的差异）。起初，人们可能会将此解释为模型在两个总体上具有相同的准确性。然而，这是一个我们应该厌倦仅仅基于数据量之间小的精度差异而提出的主张。我们的每个样本都足够大（n≈40，000），如果他们来自同一人群，他们应该看起来几乎相同。</p>
+<h2 id="4统计分析"><a href="#4统计分析" class="headerlink" title="4统计分析"></a>4统计分析</h2><h3 id="4-1T检验"><a href="#4-1T检验" class="headerlink" title="4.1T检验"></a>4.1T检验</h3><p>T 检验是一种统计检验，用于检验两组数据的独立性。在这种情况下，我们的数据是：“前半部分”和“后半部分”;二进制数字列表，其中 1 对应于正确的模型预测，0 对应于不正确的预测。</p>
+<p>我们可以使用这样的测试来确定我们的假设是正确的可能性。</p>
+<p>注意：重要的是，T检验假定预测变量&#x2F;秒近似正态分布。由于我们的数据本质上是二元的，因此这一规定有些没有实际意义。</p>
+<p>重申一下：我们预测我们的PM在游戏的后半部分将具有更高的精度，如果每个样本上的模型精度差异被证明是统计显着的，这将得到证明：（原假设p&gt;0.95）。<br>零假设是：“持久性模型在两个样本上都同样准确。</p>
+<p>如果零假设是正确的，则模型精度应相等，并且约等于报告准确性的1%差异被解释为统计上不显著的方差。</p>
+<p>由于T检验的准确性取决于样本的大小，因此，如果我们将前半部分和后半部分数组切成长度“i”，则让我们绘制 Null 假设正确的可能性。通过将 t 检验概率值与 i 绘制，我们可以看到概率趋向于零。我们可以通过外推合理地推断出原假设是假的，极有可能是假的，我们的假设是正确的。这是贝叶斯收敛的一个例子，当我们包含更多样本时，我们的假设为假的可能性呈指数级趋向于零。查看下图，了解此属性的图形演示</p>
+<p>PM似乎确实比上半场更善于预测下半场的回合数。</p>
+<h3 id="4-2-Mann–Whitney-U-检验"><a href="#4-2-Mann–Whitney-U-检验" class="headerlink" title="4.2 Mann–Whitney U 检验"></a>4.2 Mann–Whitney U 检验</h3><p>与 t 检验不同，MWU 检验不需要假定变量近似正态分布。</p>
+<center>
+
+<p><a href="https://smms.app/image/Ii67sxq2NBrjSQY" target="_blank"><img src="https://s2.loli.net/2022/11/28/Ii67sxq2NBrjSQY.png"></a></p>
+<p>图2:检验结果</p>
+</center>
+
+
+<h2 id="5结论"><a href="#5结论" class="headerlink" title="5结论"></a>5结论</h2><p>前一半和后一半持久性模型准确率分别为65.49%和66.48%;两组的分布差异很大。（Mann–Whitney U &#x3D; 539686240，first half: 38714，second half: 28160，U-test null hypothesis p-value: 0.00377366703734，P &lt; 0.0038）也就是说，原假设为真的可能性为0.38%，不同模型精度的假设概率超过99%。</p>
+<h3 id="5-1解释"><a href="#5-1解释" class="headerlink" title="5.1解释"></a>5.1解释</h3><p>虽然我们已经证明，我们的模型在预测下半回合方面确实具有更高的准确性，但准确性的差异很小，在进行任何人工分析时，大部分时间都可以忽略。我怀疑模型的准确性比我们的假设所给予的荣誉更具动态性。也就是说：我认为模型精度在逐回合的基础上会适度变化，而不是（仅）半个。尽管如此，在不同条件下和不同样品上研究模型的准确性是值得的。如果我们最终要汇总每个模型的预测，这些信息将有助于“加权”每个模型的投票。为了提高准确性，这应该动态地完成，根据n，当前比赛回合。</p>
+<h2 id="6持久性模型的准确性如何随时间演变？"><a href="#6持久性模型的准确性如何随时间演变？" class="headerlink" title="6持久性模型的准确性如何随时间演变？"></a>6持久性模型的准确性如何随时间演变？</h2><p>PM的准确性自然而然地在匹配过程中流动,在很大程度上，这可以通过观察上述回合造成的经济环境来解释，该回合在比赛过程中在不同程度上有利于该球队。在没有任何心理影响的情况下,CS：GO（回合）的子博弈是马尔可夫链的一个例子，其概率相对于当前回合是动态的。</p>
+<center>
+
+<p><a href="https://smms.app/image/JMCL8fpbqOuIg1G" target="_blank"><img src="https://s2.loli.net/2022/11/28/JMCL8fpbqOuIg1G.png"></a></p>
+<p>图3:准确性变化</p>
+<p><a href="https://smms.app/image/f6mPzatKRUGNZQX" target="_blank"><img src="https://s2.loli.net/2022/11/28/f6mPzatKRUGNZQX.png"></a></p>
+<p>图4 逻辑</p>
+</center>
+### 6.1这告诉我们什么？
+
+<p>PM精度本质上是衡量舍入n的结果与倒数n + 1的依赖程度的度量;回合的准确性表明前一轮具有相应的重要性。</p>
+<h3 id="6-2我们的假设是有缺陷的！"><a href="#6-2我们的假设是有缺陷的！" class="headerlink" title="6.2我们的假设是有缺陷的！"></a>6.2我们的假设是有缺陷的！</h3><p>我们假设：“持久性模型在游戏的每一半中都具有不同的分类准确性，”我们声称这可能表明人类的挫败感会导致扭曲的回合，其中累积的优势在心理上会被夸大。我们没有考虑到一场比赛中不同的回合数。第一个总共赢得16轮的球队赢得比赛;无论对手赢了1轮还是14轮。（15-15是平局）。因此，一场比赛的前15轮将始终进行，而下半场的15轮则不会。</p>
+<p>我们的统计数据“持久性模型下半场的准确性”具有误导性，因为我们的数据集中16-20区域的回合数比21-30区域多得多。这极大地扭曲了这一统计数据的结果，以至于它在某种程度上具有误导性。按圆形浏览PM模型的精度就说明了这一点。平均而言，上半场每个点都低于各自的回合，但下半场所有回合的平均准确率更高。</p>
+<center>
+
+<p><a href="https://smms.app/image/k3JU7OzlYQr1bTI" target="_blank"><img src="https://s2.loli.net/2022/11/28/k3JU7OzlYQr1bTI.png"></a></p>
+<p>图5数据存在的误导性</p>
+</center>
+
+
+<p>在我们的样本中发现一个巨大而麻烦的偏斜是很晚的，因为它使我们并非所有回合的胜利都值得一样！正如我们之前假设的那样，每半场的第一轮是下一轮的非常好的预测因子，其准确性比整个样品高出10%。因此，手枪子弹在数量上比其他子弹更重要。</p>
+<p>出乎意料的是，第二轮半场被证明是比第一轮更强的预测因子，这打破了手枪回合必然是半场中最重要的一轮的假设。赢得下一轮比赛充其量只是对一轮比赛重要性的粗略衡量。</p>
+<p>进一步的工作：更好的衡量标准是队伍在第一轮和第二轮获胜后赢得半场的机会。</p>
+<h3 id="6-3思考"><a href="#6-3思考" class="headerlink" title="6.3思考"></a>6.3思考</h3><p>从理论上讲，PM是分析此马尔可夫链的次优方法，原因很简单，因为它没有完全封装当前的游戏状态。</p>
+<p>从子游戏传递到子游戏的唯一游戏内参数是每个团队的现金余额，我们的数据集没有考虑到这一点。这些数据的替代是净值。区别在于，第一个包含有关团队可以采用的“购买”范围的信息，而第二个仅包含有关他们选择的“购买”策略的信息。这不是一个关键的区别。</p>
+<p>注意：在实践中，我们的“替代”数据在某些方面实际上是比“纯”数据更有用的预测因子。这样做的原因是，团队通常会承诺购买策略，虽然在当前的子游戏中是不理想的，但可以节省一部分资源以供后续回合使用。这方面的一个例子是“生态”（经济）购买策略。当然，所选择的买入策略比预测单轮结果的策略范围更好。</p>
+<p>PM非常擅长预测第2轮和第3轮的原因是，它实际上是在传达有关游戏经济状况的信息。这种准确性的迅速减少反映了这种信息的日益稀释。这可以解释为游戏的复出机制（对于连续输掉多轮比赛的球队的经济提振）。</p>
+<p>例如，如果一支球队输掉了后面的一轮比赛，但还剩下足够多的现金余额，那么与没有机会累积这种余额的早期比赛相比，他们在接下来的一轮比赛中获胜的机会受到的影响相对较小。这种逐渐稀释反映在模型精度的下降趋势中。简而言之，前几轮的回合数越少，前一轮的获胜者作为预测因子的用处就越小。</p>
+<h3 id="6-4后续工作考量"><a href="#6-4后续工作考量" class="headerlink" title="6.4后续工作考量"></a>6.4后续工作考量</h3><p>考虑量化的优势，使用K-Nearest Neighbor 算法，预测样本分类，CS：GO子博奕建模得到巅峰应该是一个马尔可夫链，我们的建模围绕着对一个子游戏的赢&#x2F;输结果进行建模。马尔可夫模型还将包括发生不同经济后果的可能性。马尔可夫模型的完成将允许对一支队伍赢得比赛的可能性进行更加全面和有凝聚力的预测。</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/Kleinyc.github.io/images/wechatpay.JPG" alt="Klein 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/Kleinyc.github.io/images/alipay.JPG" alt="Klein 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Klein
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://github.com/Kleinyc/Kleinyc.github.io/2022/06/06/games_theory/" title="反恐精英与博弈论：建模与统计分析">https://github.com/Kleinyc/Kleinyc.github.io/2022/06/06/games_theory/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat_channel.jpg">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/" rel="tag"># 技术篇</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Kleinyc.github.io/2022/05/08/Harbin/" rel="prev" title="Harbin">
+      <i class="fa fa-chevron-left"></i> Harbin
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Kleinyc.github.io/2022/06/08/%E6%9D%91%E4%B8%8A-%E8%87%AA%E7%94%B1%E4%B9%8B%E9%A3%8E/" rel="next" title="村上-自由、青春、改变、思考">
+      村上-自由、青春、改变、思考 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81NTg0OC8zMjMxMg=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">1前言</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1%E5%8F%8D%E6%81%90%E7%B2%BE%E8%8B%B1"><span class="nav-number">1.1.</span> <span class="nav-text">1.1反恐精英</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2%E7%9B%AE%E6%A0%87"><span class="nav-number">1.2.</span> <span class="nav-text">1.2目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3%E6%88%91%E4%BB%AC%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="nav-number">1.3.</span> <span class="nav-text">1.3我们的数据</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-CS%EF%BC%9AGO-%E6%B8%B8%E6%88%8F%E5%86%85%E7%BB%8F%E6%B5%8E%E5%85%A5%E9%97%A8"><span class="nav-number">2.</span> <span class="nav-text">2 CS：GO 游戏内经济入门</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3%E5%BB%BA%E6%A8%A1"><span class="nav-number">3.</span> <span class="nav-text">3建模</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1%E5%AE%9A%E4%B9%89%E7%9B%AE%E6%A0%87%E5%8F%98%E9%87%8F%E3%80%82"><span class="nav-number">3.1.</span> <span class="nav-text">3.1定义目标变量。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2%E6%8C%81%E4%B9%85%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.2.</span> <span class="nav-text">3.2持久性模型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1%E5%81%87%E8%AE%BE1%EF%BC%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1假设1：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2%E5%81%87%E8%AE%BE2"><span class="nav-number">3.2.2.</span> <span class="nav-text">3.2.2假设2</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3%E6%B5%8B%E8%AF%95"><span class="nav-number">3.3.</span> <span class="nav-text">3.3测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C"><span class="nav-number">3.4.</span> <span class="nav-text">3.4测试结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4%E7%BB%9F%E8%AE%A1%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">4统计分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1T%E6%A3%80%E9%AA%8C"><span class="nav-number">4.1.</span> <span class="nav-text">4.1T检验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Mann%E2%80%93Whitney-U-%E6%A3%80%E9%AA%8C"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 Mann–Whitney U 检验</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5%E7%BB%93%E8%AE%BA"><span class="nav-number">5.</span> <span class="nav-text">5结论</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1%E8%A7%A3%E9%87%8A"><span class="nav-number">5.1.</span> <span class="nav-text">5.1解释</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6%E6%8C%81%E4%B9%85%E6%80%A7%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%87%86%E7%A1%AE%E6%80%A7%E5%A6%82%E4%BD%95%E9%9A%8F%E6%97%B6%E9%97%B4%E6%BC%94%E5%8F%98%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">6持久性模型的准确性如何随时间演变？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2%E6%88%91%E4%BB%AC%E7%9A%84%E5%81%87%E8%AE%BE%E6%98%AF%E6%9C%89%E7%BC%BA%E9%99%B7%E7%9A%84%EF%BC%81"><span class="nav-number">6.1.</span> <span class="nav-text">6.2我们的假设是有缺陷的！</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3%E6%80%9D%E8%80%83"><span class="nav-number">6.2.</span> <span class="nav-text">6.3思考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4%E5%90%8E%E7%BB%AD%E5%B7%A5%E4%BD%9C%E8%80%83%E9%87%8F"><span class="nav-number">6.3.</span> <span class="nav-text">6.4后续工作考量</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Klein</p>
+  <div class="site-description" itemprop="description">长夜，不止有星辰，还有余火，一直在那。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Kleinyc.github.io/archives/">
+        
+          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/Kleinyc.github.io/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Kleinyc.github.io/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Kleinyc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Kleinyc"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/Kleinyc.github.io/1183300114@stu.hit.edu.cn" title="E-Mail → 1183300114@stu.hit.edu.cn"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-03 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Klein</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">30k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">27 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-6274c5078b12c927" async="async"></script>
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共25.3k字</span>
+</div>
+
+<div id="musicMouseDrag" style="position:fixed; z-index: 9999; bottom: 0; right: 0;">
+<div id="musicDragArea" style="position: absolute; top: 0; left: 0; width: 100%;height: 10px;cursor: move; z-index: 10;"></div>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=5160794&auto=1&height=66"></iframe>
+</div>
+
+<!--以下代码是为了支持随时拖动音乐控件的位置，如没有需求，可去掉下面代码-->
+<script>
+	var $DOC = $(document)
+	$('#musicMouseDrag').on('mousedown', function (e) {
+		// 阻止文本选中
+		$DOC.bind("selectstart", function () {
+			return false;
+		});
+		$('#musicDragArea').css('height', '100%');
+		var $moveTarget = $('#musicMouseDrag');
+		$moveTarget.css('border', '1px dashed grey')
+		var div_x = e.pageX - $moveTarget.offset().left;
+		var div_y = e.pageY - $moveTarget.offset().top;
+		$DOC.on('mousemove', function (e) {
+			var targetX = e.pageX - div_x;
+			var targetY = e.pageY - div_y;
+			targetX = targetX < 0 ? 0 : (targetX + $moveTarget.outerWidth() >= window.innerWidth) ? window.innerWidth - $moveTarget.outerWidth() : targetX;
+			targetY = targetY < 0 ? 0 : (targetY + $moveTarget.outerHeight() >= window.innerHeight) ? window.innerHeight - $moveTarget.outerHeight() : targetY;
+			$moveTarget.css({'left': targetX + 'px', 'top': targetY + 'px', 'bottom': 'inherit', 'right': 'inherit'})
+		}).on('mouseup', function () {
+			$DOC.unbind("selectstart");
+			$DOC.off('mousemove')
+			$DOC.off('mouseup')
+			$moveTarget.css('border', 'none')
+			$('#musicDragArea').css('height', '10px');
+		})
+	})
+</script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/Kleinyc.github.io/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/Kleinyc.github.io/lib/anime.min.js"></script>
+  <script src="/Kleinyc.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/Kleinyc.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Kleinyc.github.io/js/utils.js"></script>
+
+<script src="/Kleinyc.github.io/js/motion.js"></script>
+
+
+<script src="/Kleinyc.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/Kleinyc.github.io/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>

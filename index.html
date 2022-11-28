@@ -556,6 +556,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/Kleinyc/Kleinyc.github.io/2022/06/06/games_theory/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Kleinyc.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Klein">
+      <meta itemprop="description" content="长夜，不止有星辰，还有余火，一直在那。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="愚者之证">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/Kleinyc.github.io/2022/06/06/games_theory/" class="post-title-link" itemprop="url">反恐精英与博弈论：建模与统计分析</a>
+        </h2>
+
+        <div class="post-meta">
+			
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-06-06 14:23:05" itemprop="dateCreated datePublished" datetime="2022-06-06T14:23:05+08:00">2022-06-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-28 23:59:57" itemprop="dateModified" datetime="2022-11-28T23:59:57+08:00">2022-11-28</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">大学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>4.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <hr>
+<h2 id="1前言"><a href="#1前言" class="headerlink" title="1前言"></a>1前言</h2><h3 id="1-1反恐精英"><a href="#1-1反恐精英" class="headerlink" title="1.1反恐精英"></a>1.1反恐精英</h3><p>《反恐精英》是一款基于目标的多人第一人称射击游戏。两个对立的团队-恐怖分子和反恐精英,在游戏模式中竞争完成目标，例如确保放置或拆除炸弹的位置。在每个回合结束时，玩家会根据自己的个人表现获得游戏内货币奖励，以便在后续回合中花费在更强大的武器上。赢得回合比失败会带来更多的钱，完成杀死敌方玩家等目标可以获得现金奖励。 </p>
+<p>在博弈论术语中，CS：GO是一个由16到30个子游戏组成的随机游戏。从一轮传递到下一轮的唯一参数是每个团队的净资产。由于这些轮次既是离散的又是随机的，因此这个问题是马尔可夫链的一个例子。</p>
+<p>该游戏不仅非常受休闲游戏玩家的欢迎，而且作为一项电子竞技游戏也具有巨大的吸引力。正如网站E-Sports Earnings所指出的那样：自2012年CS：GO发布以来，总奖金池总计超过6,800，000.00美元，仅次于DOTA 2。</p>
+<p>预测比赛结果对博彩公司和博彩玩家来说都是一项有利可图的业务，CS：GO也不例外。根据《华盛顿邮报》援引的一份报告，2018年全球电子竞技博彩总额预计将达到近70亿美元。</p>
+<h3 id="1-2目标"><a href="#1-2目标" class="headerlink" title="1.2目标"></a>1.2目标</h3><p>本报告旨在通过使用统计分析和预测模型的创建来探索和分析CS：GO。我们将使用自建的持久性模型，同时可以考虑借用Python的Scikit-Learn包中包含的一些分类模型，但这点根据具体情况进行安排。在整个过程中，我将测试假设并简要讨论每个结果的重要性。</p>
+<h3 id="1-3我们的数据"><a href="#1-3我们的数据" class="headerlink" title="1.3我们的数据"></a>1.3我们的数据</h3><p>我们的数据“esea_meta_demos.part1”是从在线数据集提供商Kaggle下载的。数据是通过解析“演示”，在线提供的比赛的数字娱乐，这些非常适合建模，因为它们包含有关游戏状态的所有重要信息，并且持续更新。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Kleinyc.github.io/2022/06/06/games_theory/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://github.com/Kleinyc/Kleinyc.github.io/2022/05/08/Harbin/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -925,7 +1025,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/Kleinyc.github.io/archives/">
         
-          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-count">8</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -982,12 +1082,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">25k</span>
+    <span title="站点总字数">30k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">23 分钟</span>
+    <span title="站点阅读时长">27 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
@@ -997,7 +1097,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共21.3k字</span>
+  <span class="post-count">博客全站共25.3k字</span>
 </div>
 
 <div id="musicMouseDrag" style="position:fixed; z-index: 9999; bottom: 0; right: 0;">
