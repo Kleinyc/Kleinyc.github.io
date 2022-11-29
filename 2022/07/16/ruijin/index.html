@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.1.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/Kleinyc.github.io/images/apple-touch-icon-taluo.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/Kleinyc.github.io/images/taluo-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/Kleinyc.github.io/images/taluo-16-16.png">
+  <link rel="mask-icon" href="/Kleinyc.github.io/images/taluo.svg" color="#222">
+
+<link rel="stylesheet" href="/Kleinyc.github.io/css/main.css">
+
+
+<link rel="stylesheet" href="/Kleinyc.github.io/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="/Kleinyc.github.io/lib/pace/pace-theme-minimal.min.css">
+  <script src="/Kleinyc.github.io/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"github.com","root":"/Kleinyc.github.io/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="瑞金医院比赛数据特征数据源作为行业的金标准，可信度是最高的，但同时也有着知识覆盖面广泛、数据提取难度较大等特征。 任务思路1、想要对相关数据进行实体抽取时，首先需要将pdf文档或者图片等转换成txt文本，然后通过一些半自动化的手段进行抽取。在转换成txt过程中，我们需要注意，pdf有些里面是图片格式，不能进行编辑，这种可以使用百度OCR接口进行转化。如果只要pdf可编辑的文本，可以直接进行提取，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="知识获取——基于NLP的方法（参考瑞金医院）">
+<meta property="og:url" content="https://github.com/Kleinyc/Kleinyc.github.io/2022/07/16/ruijin/index.html">
+<meta property="og:site_name" content="愚者之证">
+<meta property="og:description" content="瑞金医院比赛数据特征数据源作为行业的金标准，可信度是最高的，但同时也有着知识覆盖面广泛、数据提取难度较大等特征。 任务思路1、想要对相关数据进行实体抽取时，首先需要将pdf文档或者图片等转换成txt文本，然后通过一些半自动化的手段进行抽取。在转换成txt过程中，我们需要注意，pdf有些里面是图片格式，不能进行编辑，这种可以使用百度OCR接口进行转化。如果只要pdf可编辑的文本，可以直接进行提取，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/4NV7YWrg9wdlitO.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/sEgL5DYZp1VjXI2.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/kE4D1glGS8QZc7J.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/d1jQyTX6UhN2g5c.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/AEpgKvxV3Gk6csm.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/JGFNDWePk7BQiMw.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/Wxn19p6TlogquJh.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/lSfxhQnqsVyIzXd.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/O9XMzLJmRrsdCPT.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/Qj2VBJaXs9Wmzc5.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/JPrQ3VdbpuSYa9v.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/TcnhkYWyVmb3SUp.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/KpOySgRislE4kuG.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/vqwH24LRSpW8kOX.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/oJRnA6glbwQGqvD.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/29/2QZ4qwSVbJfyj51.png">
+<meta property="og:image" content="https://s2.loli.net/2022/11/30/82G4hFTKwuyBodO.png">
+<meta property="article:published_time" content="2022-07-16T06:23:05.000Z">
+<meta property="article:modified_time" content="2022-11-29T16:25:01.096Z">
+<meta property="article:author" content="Klein">
+<meta property="article:tag" content="技术篇">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/11/29/4NV7YWrg9wdlitO.png">
+
+<link rel="canonical" href="https://github.com/Kleinyc/Kleinyc.github.io/2022/07/16/ruijin/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>知识获取——基于NLP的方法（参考瑞金医院） | 愚者之证</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/Kleinyc.github.io/rss2.xml" title="愚者之证" type="application/rss+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+		<a href="https://github.com/Kleinyc" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/Kleinyc.github.io/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">愚者之证</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/Kleinyc.github.io/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/Kleinyc.github.io/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/Kleinyc.github.io/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/Kleinyc.github.io/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/Kleinyc.github.io/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-resources">
+
+    <a href="/Kleinyc.github.io/resources/" rel="section"><i class="fa fa-download fa-fw"></i>资源</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://github.com/Kleinyc/Kleinyc.github.io/2022/07/16/ruijin/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/Kleinyc.github.io/images/avatar.gif">
+      <meta itemprop="name" content="Klein">
+      <meta itemprop="description" content="长夜，不止有星辰，还有余火，一直在那。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="愚者之证">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          知识获取——基于NLP的方法（参考瑞金医院）
+        </h1>
+
+        <div class="post-meta">
+			
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-07-16 14:23:05" itemprop="dateCreated datePublished" datetime="2022-07-16T14:23:05+08:00">2022-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-11-30 00:25:01" itemprop="dateModified" datetime="2022-11-30T00:25:01+08:00">2022-11-30</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/" itemprop="url" rel="index"><span itemprop="name">大学</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+              <span>4.3k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+              <span>4 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <hr>
+<h2 id="瑞金医院比赛"><a href="#瑞金医院比赛" class="headerlink" title="瑞金医院比赛"></a>瑞金医院比赛</h2><h3 id="数据特征"><a href="#数据特征" class="headerlink" title="数据特征"></a>数据特征</h3><p>数据源作为行业的金标准，可信度是最高的，但同时也有着知识覆盖面广泛、数据提取难度较大等特征。</p>
+<h3 id="任务思路"><a href="#任务思路" class="headerlink" title="任务思路"></a>任务思路</h3><p>1、想要对相关数据进行实体抽取时，首先需要将pdf文档或者图片等转换成txt文本，然后通过一些半自动化的手段进行抽取。在转换成txt过程中，我们需要注意，pdf有些里面是图片格式，不能进行编辑，这种可以使用百度OCR接口进行转化。如果只要pdf可编辑的文本，可以直接进行提取，注意是否加换行符。具体步骤可以参考下面的文件：</p>
+<p>pdf_txt.ipynb（）</p>
+<p>2、兜兜转转，通过查找，任务又回到了瑞金医院MMC人工智能辅助构建知识图谱大赛。该数据为相关教科书或者文献，是本项任务目前做的最好的且匹配的一个相关资料。在之前，我们只是对瑞金医院的相关资料进行了收集与跑通，我们使用了自己的数据进行模型训练与测试，结果堪忧，但是我们完全可以使用网络上已经训练好的模型进行预测，最后将获得结果进行转化，匹配成为适合我们使用的数据。</p>
+<p>3、现在，需要做的是保存好训练得到的模型，使用该模型进行教科书和文献的实体抽取。</p>
+<p>4、训练好之后，还有一项任务是数据的保存，虽然已经可以展示预测的结果，但是其数据格式还未明确，接下来需要进行数据保存工作。</p>
+<span id="more"></span>
+
+<h2 id="瑞金医院MMC"><a href="#瑞金医院MMC" class="headerlink" title="瑞金医院MMC"></a>瑞金医院MMC</h2><p><a target="_blank" rel="noopener" href="https://tianchi.aliyun.com/competition/entrance/231687/introduction">link:</a></p>
+<h3 id="Background"><a href="#Background" class="headerlink" title="Background"></a>Background</h3><p>比赛以人工智能辅助糖尿病知识图谱构建为题，通过糖尿病相关的教科书、研究论文来进行糖尿病文献挖掘并构建糖尿病知识图谱。</p>
+<h3 id="第一赛季任务"><a href="#第一赛季任务" class="headerlink" title="第一赛季任务"></a>第一赛季任务</h3><p>大赛主办方提供与糖尿病相关的学术论文以及糖尿病临床指南，要求选手在学术论文和临床指南的基础上，做实体的标注。实体类别共十五类。</p>
+<p><em>具体参见：<a target="_blank" rel="noopener" href="https://tianchi.aliyun.com/competition/entrance/231687/information">https://tianchi.aliyun.com/competition/entrance/231687/information</a></em></p>
+<h3 id="第二赛季任务"><a href="#第二赛季任务" class="headerlink" title="第二赛季任务"></a>第二赛季任务</h3><p>大赛主办方瑞金提供与糖尿病相关的学术论文以及糖尿病临床指南。选手从中抽取实体之间的关系。实体之间关系共十类。</p>
+<p><em>文件标注工作基于brat软件，</em><a target="_blank" rel="noopener" href="http://brat.nlplab.org/"><em>http://brat.nlplab.org/</em></a><em>。其中.txt文件为原始文档，.ann文件为标注信息，标注实体以T开头，后接实体序号，实体类别，起始位置和实体对应的文档中的词。如果需要在brat软件中查看标注结果，需要添加.conf文件。</em></p>
+<p><em>数据格式：</em></p>
+<p><em>第一赛季：文件中每一列以tab分割，共三列：第一列为实体编号，编号自拟且需唯一；第二列包含实体类别和实体的起始和终止位置，以空格分割，注意部分实体可能在第二列有分号，表示该实体跨行；第三列是实体所对应的词语。</em></p>
+<p><em>第二赛季：在原有内容的基础上，后面添加行代表关系。关系行以tab分割，共两列：第一列为关系编号，以字符R开头，如“R1”，编号需唯一；第二列包含关系类别和关系的起始（以Arg1:开始，后接实体id，如“Arg1:T1”）和终止位置（以Arg2:开始，后接实体id，如“Arg2:T2”），以空格分割。</em></p>
+<h2 id="实例1"><a href="#实例1" class="headerlink" title="实例1"></a>实例1</h2><p><a href="https://github.com/beader/ruijin_round1">实例1link</a></p>
+<h3 id="实例方法"><a href="#实例方法" class="headerlink" title="实例方法"></a>实例方法</h3><p>只包含命名实体识别的第一赛季。</p>
+<p>使用了Bidirectional LSTM + CRF，一种常见的方法，用起来简单，但也有麻烦的地方，包括：</p>
+<ul>
+<li>对一篇文章去做实体标注，文章的字数可能很长(几千到上万字)，不可能直接输入到一个 RNN 中。</li>
+<li>样本中文章可能由于格式转换的一些原因，没有一个很好的句子边界，甚至一个词汇当中存在换行符 \n 或者句号 。 的情况，因此用换行符或者句号去切割句子不一定合适。如果按照固定窗口大小的滑动窗口去切句子，刚好把一个实体切分成2个部分怎么办？</li>
+<li>中文分词</li>
+</ul>
+<h3 id="实例结果"><a href="#实例结果" class="headerlink" title="实例结果"></a>实例结果</h3><h4 id="测试与预测结果："><a href="#测试与预测结果：" class="headerlink" title="测试与预测结果："></a>测试与预测结果：</h4><center>
+
+<p><a href="https://smms.app/image/4NV7YWrg9wdlitO" target="_blank"><img src="https://s2.loli.net/2022/11/29/4NV7YWrg9wdlitO.png"></a></p>
+</center>
+
+<p>可以看出结果还是不错的。模型准确率也在0.75+的水平。</p>
+<h4 id="问题："><a href="#问题：" class="headerlink" title="问题："></a>问题：</h4><p>模型肯定是不能拿来直接用的，数据输入部分需要一定的变化。但替换数据之后，将数据输入的实体文件（ann）文件改为空，在最后预测的输入部分，预测的实体位置与类型不正确，原因尚未找到。</p>
+<center>
+<a href="https://smms.app/image/sEgL5DYZp1VjXI2" target="_blank"><img src="https://s2.loli.net/2022/11/29/sEgL5DYZp1VjXI2.png"></a>
+</center>
+
+<h2 id="实例2"><a href="#实例2" class="headerlink" title="实例2"></a>实例2</h2><p><a href="https://github.com/ZhengZixiang/tianchi_ruijin_knowledge_graph">实例2link</a></p>
+<h4 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h4><p>输入输出比较清晰，是之前我们使用过的BIO格式，最后转换成瑞金医院比赛所需的输出，结构明了。</p>
+<h4 id="数据处理方式"><a href="#数据处理方式" class="headerlink" title="数据处理方式"></a>数据处理方式</h4><p>在子文件中，详见→[数据预处理及解决]</p>
+<h4 id="requirements"><a href="#requirements" class="headerlink" title="requirements"></a>requirements</h4><p>Python3</p>
+<p>CRF模型：</p>
+<ul>
+<li>beautifulsoup</li>
+<li>codecs</li>
+<li>jieba&#x3D;&#x3D;0.39</li>
+<li>pandas</li>
+<li>progressbar2&#x3D;&#x3D;3.38.0</li>
+<li>python-crfsuite&#x3D;&#x3D;0.9.6</li>
+<li>scikit-learn</li>
+</ul>
+<p>BiLSTM+CRF模型</p>
+<ul>
+<li>keras&#x3D;&#x3D;2.2.4</li>
+<li>git+<a target="_blank" rel="noopener" href="https://www.github.com/keras-team/keras-contrib.git">https://www.github.com/keras-team/keras-contrib.git</a></li>
+</ul>
+<h3 id="遇到的问题"><a href="#遇到的问题" class="headerlink" title="遇到的问题"></a>遇到的问题</h3><p>在进行文字比对的过程中需要获取<a target="_blank" rel="noopener" href="http://www.zdic.net/sousuo/%E7%BD%91%E7%AB%99%E4%B8%8A%E7%9A%84%E4%B8%80%E4%BA%9B%E4%BF%A1%E6%81%AF%EF%BC%8C%E6%88%91%E4%BB%AC%E5%8F%91%E7%8E%B0%E6%9C%89%E4%B8%80%E4%BA%9B%E5%AD%97%E7%BD%91%E7%AB%99%E4%B8%8D%E8%83%BD%E8%A7%A3%E6%9E%90%EF%BC%8C%E6%9C%AC%E6%9D%A5%E4%BB%A5%E4%B8%BA%E6%98%AF%E7%BD%91%E7%AB%99%E6%9B%B4%E6%94%B9%EF%BC%8C%E5%AF%BC%E8%87%B4%E6%9F%A5%E8%AF%A2%E7%9A%84%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%89%BE%E4%B8%8D%E5%88%B0%E5%AF%B9%E5%BA%94%E7%9A%84id%E6%88%96attrs%E3%80%82%E4%BD%86%E5%90%8E%E7%BB%AD%E5%8F%91%E7%8E%B0%EF%BC%8C%E6%98%AF%E4%B8%80%E4%BA%9B%E6%96%87%E5%AD%97%E5%B9%B6%E6%9C%AA%E5%87%BA%E7%8E%B0%E5%9C%A8%E7%BD%91%E7%AB%99%E7%9A%84%E5%BA%93%E4%B8%AD%EF%BC%8C%E8%BF%99%E5%B0%B1%E5%AF%BC%E8%87%B4%E4%BA%86NoneType%E7%9A%84%E6%8A%A5%E9%94%99%EF%BC%8C%E8%BF%99%E9%87%8C%E4%BD%BF%E7%94%A8try%EF%BC%9A">http://www.zdic.net/sousuo/网站上的一些信息，我们发现有一些字网站不能解析，本来以为是网站更改，导致查询的过程中找不到对应的id或attrs。但后续发现，是一些文字并未出现在网站的库中，这就导致了NoneType的报错，这里使用try：</a> except： 将找不到忽略，最终忽视这些错误，以达成我们的目标。</p>
+<center>
+<a href="https://smms.app/image/kE4D1glGS8QZc7J" target="_blank"><img src="https://s2.loli.net/2022/11/30/kE4D1glGS8QZc7J.png"></a>
+</center>
+
+<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>成功进行了实体识别，效果还不错，数据输入是左侧格式的，输出是可以查找到实体位置的ann文件，只需要进行数据格式转化即可。</p>
+<center>
+<a href="https://smms.app/image/d1jQyTX6UhN2g5c" target="_blank"><img src="https://s2.loli.net/2022/11/30/d1jQyTX6UhN2g5c.png"></a>
+</center>
+
+<h2 id="第二赛季"><a href="#第二赛季" class="headerlink" title="第二赛季"></a>第二赛季</h2><h3 id="解决思路"><a href="#解决思路" class="headerlink" title="解决思路"></a>解决思路</h3><h3 id="数据特点："><a href="#数据特点：" class="headerlink" title="数据特点："></a>数据特点：</h3><ol>
+<li>已知实体对可能关系类别，但未知是否成立</li>
+<li>数据集标签存在一定噪声(存在关系的实体对相隔太远)</li>
+</ol>
+<h3 id="构建训练样本"><a href="#构建训练样本" class="headerlink" title="构建训练样本"></a>构建训练样本</h3><p>当成一个二分类问题来做。先生成 Candidate Entity Pairs，做一些简单的过滤，然后利用训练集中的 Relation 数据给 Candidate Entity Pairs 打 0 或者 1 的标签。</p>
+<center>
+<a href="https://smms.app/image/AEpgKvxV3Gk6csm" target="_blank"><img src="https://s2.loli.net/2022/11/29/AEpgKvxV3Gk6csm.png"></a>
+</center>
+
+<p>比赛中，用中文句号 (。) 做句子切分，选取 size&#x3D;2, step&#x3D;1 的滑动窗口来生成句子。即每个句子包含原始文章中的2句话。接着把每个句子中出现的 entities 做个排列组合，把不存在于比赛要求的 10 个 relation type 中的组合过滤掉，作为 candidate entity pairs。</p>
+<h3 id="向量化"><a href="#向量化" class="headerlink" title="向量化"></a>向量化</h3><p>对每个样本进行向量化，提取 5 个向量作为模型的输入。</p>
+<ul>
+<li>char id sequence 为转化为字符id后的句子文本序列</li>
+<li>entity labels vector 为代表 entity 类别的向量</li>
+<li>from entity mask 用 [1] 标记出 from_entity 的位置，剩余位置补 [0]</li>
+<li>to entity mask 用 [1] 标记出 to_entity 的位置，剩余位置补 [0]</li>
+<li>entity distance 为一个带符号的实数，用来表示两个 entity 的距离</li>
+</ul>
+<h3 id="核心思路"><a href="#核心思路" class="headerlink" title="核心思路"></a>核心思路</h3><ol>
+<li>实体对两两组合，并将覆盖他们的句子切出进行分类</li>
+<li>覆盖实体对的句子在两端各取一定长度的短句丰富上下文信息</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Plaintext  if end - begin &lt;&#x3D; 100:   padding &#x3D; 50 # window是在两边补多少词   elif end - begin &lt;&#x3D; 140:   padding &#x3D; 30  else:   padding &#x3D; 0</th>
+</tr>
+</thead>
+</table>
+<p><a target="_blank" rel="noopener" href="https://qrfaction.github.io/2019/02/28/%E7%91%9E%E9%87%91%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">可以点击看这篇文章</a></p>
+<h3 id="结果-1"><a href="#结果-1" class="headerlink" title="结果"></a>结果</h3><p>最后在识别率方面，不是很高，检查了一下，临近区域的关系基本上是正确的，但部分距离较远的两个实体，不一定有关系，这和数据标签本身的噪声有关，同样也和训练的模型效果有关。</p>
+<center>
+<a href="https://smms.app/image/JGFNDWePk7BQiMw" target="_blank"><img src="https://s2.loli.net/2022/11/30/JGFNDWePk7BQiMw.png"></a>
+</center>
+
+<p>识别效果尚可，临近区域的关系识别准确率也是可靠的。</p>
+<h2 id="知识获取（基于瑞金医院比赛）的全过程方案"><a href="#知识获取（基于瑞金医院比赛）的全过程方案" class="headerlink" title="知识获取（基于瑞金医院比赛）的全过程方案"></a>知识获取（基于瑞金医院比赛）的全过程方案</h2><h3 id="数据处理部分"><a href="#数据处理部分" class="headerlink" title="数据处理部分"></a>数据处理部分</h3><p>由于瑞金医院代码预测需要生成每个字一行的csv文件，所以要面向糖尿病医学指南等pdf类型文件进行数据预处理。主要思路是是首先识别pdf文字，再生成csv，根据上传的代码以及预处理的思路整理了如下的流程：</p>
+<center>
+<a href="https://smms.app/image/Wxn19p6TlogquJh" target="_blank"><img src="https://s2.loli.net/2022/11/29/Wxn19p6TlogquJh.png"></a>
+</center>
+
+<p>每个代码的注意事项：</p>
+<h4 id="1-pdf-txt-ipynb"><a href="#1-pdf-txt-ipynb" class="headerlink" title="1.pdf_txt.ipynb"></a>1.pdf_txt.ipynb</h4><p>使用时主要是修改路径path，注意：一定要将Python文件与PDF文件放在同一个目录内，否则代码不能成功运行</p>
+<table>
+<thead>
+<tr>
+<th>JSON if _<em>name</em>_ &#x3D;&#x3D; ‘<strong>main</strong>‘: #PDF文件所在的路径.注意：一定要将Python文件与PDF文件放在同一个目录内，否则代码不能成功运行  path &#x3D; r’D:\JUPYTER\pdf-txt’   pdfList &#x3D; os.listdir(path)</th>
+</tr>
+</thead>
+</table>
+<p>在该文件夹下就能生成一个txt文件，生成后可以放到一个单独的文件夹里，以防重复生成</p>
+<center>
+<a href="https://smms.app/image/lSfxhQnqsVyIzXd" target="_blank"><img src="https://s2.loli.net/2022/11/30/lSfxhQnqsVyIzXd.png"></a>
+</center>
+
+<h4 id="2-txt-csv-ipynb"><a href="#2-txt-csv-ipynb" class="headerlink" title="2.txt_csv.ipynb"></a>2.txt_csv.ipynb</h4><p>如果直接使用源代码中数据预处理的代码preprocess.py中生成csv会遇到问题，源代码自带的csv文件遇到换行符只空一行，表明换行，但是直接运行该代码生成两行空行，经过调研得到原因：</p>
+<center>
+<a href="https://smms.app/image/O9XMzLJmRrsdCPT" target="_blank"><img src="https://s2.loli.net/2022/11/29/O9XMzLJmRrsdCPT.png" alt="  _4_.png"></a>
+</center>
+所以不能直接使用read函数读取生成list，重新写一个函数，用readlines函数对每一行依次进行读取再生成csv文件解决问题
+
+<p>在使用前注意<strong>修改文件的输入路径（txt文件集的路径）和输出路径</strong>，可以批量输出</p>
+<h4 id="3-pdf转图片"><a href="#3-pdf转图片" class="headerlink" title="3.pdf转图片"></a>3.pdf转图片</h4><p>目前找到的最便捷有效的方法是使用免费的pdf转图片网站<a target="_blank" rel="noopener" href="https://pdftoimage.com/%EF%BC%8C%E8%BF%99%E4%B8%AA%E7%BD%91%E7%AB%99%E5%8F%AF%E4%BB%A5%E6%89%B9%E9%87%8F%E4%B8%8A%E4%BC%A0pdf%E5%85%8D%E8%B4%B9%E8%BD%AC%E6%8D%A2%E4%B8%BA%E6%AF%8F%E4%B8%80%E9%A1%B5%E7%9A%84%E5%9B%BE%E7%89%87%EF%BC%88%E6%9C%89%E5%8D%95%E6%AC%A1%E4%B8%8A%E9%99%90%E8%A6%81%E6%B1%82%EF%BC%89%EF%BC%8C%E7%94%9F%E6%88%90%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%8C%85%E4%B8%AD%E5%9B%BE%E7%89%87%E5%90%8D%E5%AD%97%E6%A0%B9%E6%8D%AE%E9%A1%B5%E7%A0%81%E6%8E%92%E5%BA%8F%E6%96%B9%E4%BE%BF%E5%A4%84%E7%90%86%EF%BC%8C%E8%80%8C%E4%B8%94%E7%94%9F%E6%88%90%E7%9A%84%E5%9B%BE%E7%89%87%E5%9C%A8%E4%B9%8B%E5%90%8E%E7%9A%84%E8%AF%86%E5%88%AB%E4%B8%AD%E6%9C%89%E5%BE%88%E5%A5%BD%E7%9A%84%E6%95%88%E6%9E%9C%E3%80%82">https://pdftoimage.com/，这个网站可以批量上传pdf免费转换为每一页的图片（有单次上限要求），生成的压缩包中图片名字根据页码排序方便处理，而且生成的图片在之后的识别中有很好的效果。</a></p>
+<h4 id="4-批量识别图片-ipynb"><a href="#4-批量识别图片-ipynb" class="headerlink" title="4.批量识别图片.ipynb"></a>4.批量识别图片.ipynb</h4><p>将pdf转图片网站输出的压缩包在path路径下解压，可以多本书多个文件夹同时进行识别</p>
+<table>
+<thead>
+<tr>
+<th>JSON path &#x3D; ‘.&#x2F;test&#x2F;‘</th>
+</tr>
+</thead>
+</table>
+<center>
+<a href="https://smms.app/image/Qj2VBJaXs9Wmzc5" target="_blank"><img src="https://s2.loli.net/2022/11/29/Qj2VBJaXs9Wmzc5.png"></a>
+</center>
+
+<p>需要配置的环境是图片识别文字的工具包，使用pytesseract和PIL库识别图片中的中文，环境配置方法<a target="_blank" rel="noopener" href="https://blog.csdn.net/pythonxiaopeng/article/details/109028403%E7%BB%93%E6%9E%9C%E5%BE%88%E5%A5%BD%EF%BC%8C%E9%99%A4%E4%BA%86%E4%B8%80%E4%BA%9B%E6%A0%87%E7%82%B9%E9%94%99%E8%AF%AF%E6%96%87%E5%AD%97%E5%86%85%E5%AE%B9%E5%9F%BA%E6%9C%AC%E6%AD%A3%E7%A1%AE%EF%BC%8C%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E5%AF%B9%E4%BA%8E%E4%B8%A4%E6%A0%8F%E6%A0%BC%E5%BC%8F%E7%9A%84%E6%95%B0%E6%8D%AE%E6%96%87%E5%AD%97%E9%A1%BA%E5%BA%8F%E6%B2%A1%E6%9C%89%E5%87%BA%E9%94%99%EF%BC%8C%E5%A6%82%E5%9B%BE%EF%BC%9A">https://blog.csdn.net/pythonxiaopeng/article/details/109028403结果很好，除了一些标点错误文字内容基本正确，重要的是对于两栏格式的数据文字顺序没有出错，如图：</a></p>
+<center>
+<a href="https://smms.app/image/JPrQ3VdbpuSYa9v" target="_blank"><img src="https://s2.loli.net/2022/11/30/JPrQ3VdbpuSYa9v.png"></a>
+</center>
+
+<p>右栏识别出的结果如下，是string格式（注意用replace函数把空格去掉，并把\n\n替换为\n，便于生成数据所需要的表格格式）：</p>
+<center>
+<a href="https://smms.app/image/TcnhkYWyVmb3SUp" target="_blank"><img src="https://s2.loli.net/2022/11/30/TcnhkYWyVmb3SUp.png"></a>
+</center>
+
+<p>path路径中除了要识别的文件夹不要有其他的文件夹，而且图片必须要放到下级的文件夹中，这个代码的思路是识别path中的所有文件夹，对每个文件夹的图片识别文字并生成一个csv（csv的名字是子文件夹的名字，如图）</p>
+<center>
+<a href="https://smms.app/image/KpOySgRislE4kuG" target="_blank"><img src="https://s2.loli.net/2022/11/30/KpOySgRislE4kuG.png"></a>
+</center>
+### 命名实体识别
+
+<p>下载<a target="_blank" rel="noopener" href="https://vp5n68z1wa.feishu.cn/wiki/wikcnoX5A7iVYiz6J8D4F6bv9Cc">NER_Ruijin.rar</a></p>
+<p>运行这个文件即可</p>
+<center>
+<a href="https://smms.app/image/vqwH24LRSpW8kOX" target="_blank"><img src="https://s2.loli.net/2022/11/29/vqwH24LRSpW8kOX.png"></a>
+</center>
+
+<p>数据放在这里，数据为处理好的csv文件，上面有介绍。</p>
+<center>
+<a href="https://smms.app/image/oJRnA6glbwQGqvD" target="_blank"><img src="https://s2.loli.net/2022/11/29/oJRnA6glbwQGqvD.png"></a>
+</center>
+
+<h3 id="关系抽取"><a href="#关系抽取" class="headerlink" title="关系抽取"></a>关系抽取</h3><p><a target="_blank" rel="noopener" href="https://vp5n68z1wa.feishu.cn/wiki/wikcnOHCWBT7qs3XXGKMohrwoNW">RE_Ruijin.rar</a></p>
+<p>运行这个文件，其中数据集在data\round2\this_file_to_add_NER_data中</p>
+<center>
+<a href="https://smms.app/image/2QZ4qwSVbJfyj51" target="_blank"><img src="https://s2.loli.net/2022/11/29/2QZ4qwSVbJfyj51.png"></a>
+</center>
+
+<p>文件包括两种，一个是原始txt文件，一个是经过NER的ann文件</p>
+<center>
+<a href="https://smms.app/image/82G4hFTKwuyBodO" target="_blank"><img src="https://s2.loli.net/2022/11/30/82G4hFTKwuyBodO.png"></a>
+</center>
+
+<p>输出为zip文件，文件中有submit和x1这种例子。</p>
+<p><strong>需要学习可以邮件联系我。</strong></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/Kleinyc.github.io/images/wechatpay.JPG" alt="Klein 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/Kleinyc.github.io/images/alipay.JPG" alt="Klein 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Klein
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://github.com/Kleinyc/Kleinyc.github.io/2022/07/16/ruijin/" title="知识获取——基于NLP的方法（参考瑞金医院）">https://github.com/Kleinyc/Kleinyc.github.io/2022/07/16/ruijin/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+        
+
+  <div class="followme">
+    <p>欢迎关注我的其它发布渠道</p>
+
+    <div class="social-list">
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/images/wechat_channel.jpg">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </a>
+        </div>
+
+        <div class="social-item">
+          <a target="_blank" class="social-link" href="/atom.xml">
+            <span class="icon">
+              <i class="fa fa-rss"></i>
+            </span>
+
+            <span class="label">RSS</span>
+          </a>
+        </div>
+    </div>
+  </div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/" rel="tag"># 技术篇</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/Kleinyc.github.io/2022/06/08/%E6%9D%91%E4%B8%8A-%E8%87%AA%E7%94%B1%E4%B9%8B%E9%A3%8E/" rel="prev" title="村上-自由、青春、改变、思考">
+      <i class="fa fa-chevron-left"></i> 村上-自由、青春、改变、思考
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/Kleinyc.github.io/2022/11/16/%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96/" rel="next" title="饮食数据爬取与匹配——以某健康项目为例">
+      饮食数据爬取与匹配——以某健康项目为例 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    
+  <div class="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC81NTg0OC8zMjMxMg=="></div>
+  </div>
+  
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%91%9E%E9%87%91%E5%8C%BB%E9%99%A2%E6%AF%94%E8%B5%9B"><span class="nav-number">1.</span> <span class="nav-text">瑞金医院比赛</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%89%B9%E5%BE%81"><span class="nav-number">1.1.</span> <span class="nav-text">数据特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%BB%E5%8A%A1%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.</span> <span class="nav-text">任务思路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%91%9E%E9%87%91%E5%8C%BB%E9%99%A2MMC"><span class="nav-number">2.</span> <span class="nav-text">瑞金医院MMC</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Background"><span class="nav-number">2.1.</span> <span class="nav-text">Background</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E8%B5%9B%E5%AD%A3%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.2.</span> <span class="nav-text">第一赛季任务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%B5%9B%E5%AD%A3%E4%BB%BB%E5%8A%A1"><span class="nav-number">2.3.</span> <span class="nav-text">第二赛季任务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B1"><span class="nav-number">3.</span> <span class="nav-text">实例1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E6%96%B9%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">实例方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B%E7%BB%93%E6%9E%9C"><span class="nav-number">3.2.</span> <span class="nav-text">实例结果</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E4%B8%8E%E9%A2%84%E6%B5%8B%E7%BB%93%E6%9E%9C%EF%BC%9A"><span class="nav-number">3.2.1.</span> <span class="nav-text">测试与预测结果：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A"><span class="nav-number">3.2.2.</span> <span class="nav-text">问题：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E4%BE%8B2"><span class="nav-number">4.</span> <span class="nav-text">实例2</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">4.0.1.</span> <span class="nav-text">特点</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%96%B9%E5%BC%8F"><span class="nav-number">4.0.2.</span> <span class="nav-text">数据处理方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#requirements"><span class="nav-number">4.0.3.</span> <span class="nav-text">requirements</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">4.1.</span> <span class="nav-text">遇到的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C"><span class="nav-number">4.2.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E8%B5%9B%E5%AD%A3"><span class="nav-number">5.</span> <span class="nav-text">第二赛季</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="nav-number">5.1.</span> <span class="nav-text">解决思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E7%89%B9%E7%82%B9%EF%BC%9A"><span class="nav-number">5.2.</span> <span class="nav-text">数据特点：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E8%AE%AD%E7%BB%83%E6%A0%B7%E6%9C%AC"><span class="nav-number">5.3.</span> <span class="nav-text">构建训练样本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96"><span class="nav-number">5.4.</span> <span class="nav-text">向量化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E6%80%9D%E8%B7%AF"><span class="nav-number">5.5.</span> <span class="nav-text">核心思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BB%93%E6%9E%9C-1"><span class="nav-number">5.6.</span> <span class="nav-text">结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E8%8E%B7%E5%8F%96%EF%BC%88%E5%9F%BA%E4%BA%8E%E7%91%9E%E9%87%91%E5%8C%BB%E9%99%A2%E6%AF%94%E8%B5%9B%EF%BC%89%E7%9A%84%E5%85%A8%E8%BF%87%E7%A8%8B%E6%96%B9%E6%A1%88"><span class="nav-number">6.</span> <span class="nav-text">知识获取（基于瑞金医院比赛）的全过程方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E9%83%A8%E5%88%86"><span class="nav-number">6.1.</span> <span class="nav-text">数据处理部分</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-pdf-txt-ipynb"><span class="nav-number">6.1.1.</span> <span class="nav-text">1.pdf_txt.ipynb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-txt-csv-ipynb"><span class="nav-number">6.1.2.</span> <span class="nav-text">2.txt_csv.ipynb</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-pdf%E8%BD%AC%E5%9B%BE%E7%89%87"><span class="nav-number">6.1.3.</span> <span class="nav-text">3.pdf转图片</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%89%B9%E9%87%8F%E8%AF%86%E5%88%AB%E5%9B%BE%E7%89%87-ipynb"><span class="nav-number">6.1.4.</span> <span class="nav-text">4.批量识别图片.ipynb</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E7%B3%BB%E6%8A%BD%E5%8F%96"><span class="nav-number">6.2.</span> <span class="nav-text">关系抽取</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Klein</p>
+  <div class="site-description" itemprop="description">长夜，不止有星辰，还有余火，一直在那。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/Kleinyc.github.io/archives/">
+        
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/Kleinyc.github.io/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/Kleinyc.github.io/tags/">
+          
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Kleinyc" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Kleinyc"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/Kleinyc.github.io/1183300114@stu.hit.edu.cn" title="E-Mail → 1183300114@stu.hit.edu.cn"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2022-03 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Klein</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">34k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">31 分钟</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+  <div class="addthis_inline_share_toolbox">
+    <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-6274c5078b12c927" async="async"></script>
+  </div>
+
+<div class="theme-info">
+  <div class="powered-by"></div>
+  <span class="post-count">博客全站共28.2k字</span>
+</div>
+
+<div id="musicMouseDrag" style="position:fixed; z-index: 9999; bottom: 0; right: 0;">
+<div id="musicDragArea" style="position: absolute; top: 0; left: 0; width: 100%;height: 10px;cursor: move; z-index: 10;"></div>
+<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="//music.163.com/outchain/player?type=2&id=5160794&auto=1&height=66"></iframe>
+</div>
+
+<!--以下代码是为了支持随时拖动音乐控件的位置，如没有需求，可去掉下面代码-->
+<script>
+	var $DOC = $(document)
+	$('#musicMouseDrag').on('mousedown', function (e) {
+		// 阻止文本选中
+		$DOC.bind("selectstart", function () {
+			return false;
+		});
+		$('#musicDragArea').css('height', '100%');
+		var $moveTarget = $('#musicMouseDrag');
+		$moveTarget.css('border', '1px dashed grey')
+		var div_x = e.pageX - $moveTarget.offset().left;
+		var div_y = e.pageY - $moveTarget.offset().top;
+		$DOC.on('mousemove', function (e) {
+			var targetX = e.pageX - div_x;
+			var targetY = e.pageY - div_y;
+			targetX = targetX < 0 ? 0 : (targetX + $moveTarget.outerWidth() >= window.innerWidth) ? window.innerWidth - $moveTarget.outerWidth() : targetX;
+			targetY = targetY < 0 ? 0 : (targetY + $moveTarget.outerHeight() >= window.innerHeight) ? window.innerHeight - $moveTarget.outerHeight() : targetY;
+			$moveTarget.css({'left': targetX + 'px', 'top': targetY + 'px', 'bottom': 'inherit', 'right': 'inherit'})
+		}).on('mouseup', function () {
+			$DOC.unbind("selectstart");
+			$DOC.off('mousemove')
+			$DOC.off('mouseup')
+			$moveTarget.css('border', 'none')
+			$('#musicDragArea').css('height', '10px');
+		})
+	})
+</script>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  
+  <script color='0,0,255' opacity='0.5' zIndex='-1' count='99' src="/Kleinyc.github.io/lib/canvas-nest/canvas-nest.min.js"></script>
+  <script src="/Kleinyc.github.io/lib/anime.min.js"></script>
+  <script src="/Kleinyc.github.io/lib/velocity/velocity.min.js"></script>
+  <script src="/Kleinyc.github.io/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/Kleinyc.github.io/js/utils.js"></script>
+
+<script src="/Kleinyc.github.io/js/motion.js"></script>
+
+
+<script src="/Kleinyc.github.io/js/schemes/pisces.js"></script>
+
+
+<script src="/Kleinyc.github.io/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<script>
+NexT.utils.loadComments(document.querySelector('#lv-container'), () => {
+  window.livereOptions = {
+    refer: location.pathname.replace(CONFIG.root, '').replace('index.html', '')
+  };
+  (function(d, s) {
+    var j, e = d.getElementsByTagName(s)[0];
+    if (typeof LivereTower === 'function') { return; }
+    j = d.createElement(s);
+    j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+    j.async = true;
+    e.parentNode.insertBefore(j, e);
+  })(document, 'script');
+});
+</script>
+
+</body>
+</html>
