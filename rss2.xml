@@ -9,8 +9,121 @@
     <atom:link href="https://github.com/Kleinyc/Kleinyc.github.io/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>长夜，不止有星辰，还有余火，一直在那。</description>
-    <pubDate>Mon, 01 May 2023 10:37:33 GMT</pubDate>
+    <pubDate>Mon, 01 May 2023 15:31:28 GMT</pubDate>
     <generator>http://hexo.io/</generator>
+    
+    <item>
+      <title>LLM Finetune &amp;&amp; Prompt engineering</title>
+      <link>https://github.com/Kleinyc/Kleinyc.github.io/2023/05/01/LLM_GPT/</link>
+      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2023/05/01/LLM_GPT/</guid>
+      <pubDate>Mon, 01 May 2023 04:00:00 GMT</pubDate>
+      
+      <description>&lt;hr&gt;
+&lt;h1 id=&quot;From-our-previous-discussion-about-GPT-finetune-we-decide-to-do-two-aspects-of-work&quot;&gt;&lt;a href=&quot;#From-our-previous-discussion-about-GPT-finetune-we-decide-to-do-two-aspects-of-work&quot; class=&quot;headerlink&quot; title=&quot;From our previous discussion about GPT-finetune, we decide to do two aspects of work.&quot;&gt;&lt;/a&gt;From our previous discussion about GPT-finetune, we decide to do two aspects of work.&lt;/h1&gt;&lt;ol&gt;
+&lt;li&gt;Using a spider to crawl some QA dataset → Based on llama&amp;#x2F;other_gpt_model to do finetune.&lt;/li&gt;
+&lt;li&gt;Set up a UI based on the released GPT model and use a prompt to teach the model some knowledge → QA&lt;/li&gt;
+&lt;/ol&gt;</description>
+      
+      
+      
+      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><h1 id="From-our-previous-discussion-about-GPT-finetune-we-decide-to-do-two-aspects-of-work"><a href="#From-our-previous-discussion-about-GPT-finetune-we-decide-to-do-two-aspects-of-work" class="headerlink" title="From our previous discussion about GPT-finetune, we decide to do two aspects of work."></a>From our previous discussion about GPT-finetune, we decide to do two aspects of work.</h1><ol><li>Using a spider to crawl some QA dataset → Based on llama&#x2F;other_gpt_model to do finetune.</li><li>Set up a UI based on the released GPT model and use a prompt to teach the model some knowledge → QA</li></ol><span id="more"></span><h2 id="Task-1"><a href="#Task-1" class="headerlink" title="Task 1"></a>Task 1</h2><p>Spider website link:</p><p><a href="https://forums.autodesk.com/t5/bim-360-support/bd-p/183">https://forums.autodesk.com/t5/bim-360-support/bd-p/183</a></p><p>Spider Code:</p><p>test_qa_bim360.py[will create a github repo]</p><p>Dataset:</p><p>output_file.json</p><p>GPT_Model:</p><p>tloen&#x2F;alpaca-lora: Instruct-tune LLaMA on consumer hardware (github.com)</p><p>Result:</p><p>torch.cuda.OutOfMemoryError: CUDA out of memory.</p><p>We need a high GPU need. At least 24GB like nvidia-3090Ti.</p><h2 id="Task-2"><a href="#Task-2" class="headerlink" title="Task 2"></a>Task 2</h2><p>Chinese-English model try:</p><p>Based on local knowledge dataset ChatGLM-6B. The basic theory as follows:</p><p>The process includes loading files -&gt; reading text -&gt; text segmentation -&gt; text vectorization -&gt; question vectorization -&gt; matching the top k most similar to the question vector in the text vector -&gt; matching the text as the context Add it to the prompt with the question -&gt; Submit to LLM to generate the answer.</p><p>I have set up a webui to do a test, conclusion is same as the project owner write → <a href="https://www.heywhale.com/mw/project/643977aa446c45f4592a1e59">https://www.heywhale.com/mw/project/643977aa446c45f4592a1e59</a>.</p><p>After discussion with Jason, we think we can try to use our open dataset and use some open model UI in colab to test if it’s OK.</p><p>If the result is OK, we may apply to use a high performance machine to iterate.</p>]]></content:encoded>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/">大学</category>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
+      
+      
+      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2023/05/01/LLM_GPT/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Autodesk Internship</title>
+      <link>https://github.com/Kleinyc/Kleinyc.github.io/2023/05/01/master_internship_study/</link>
+      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2023/05/01/master_internship_study/</guid>
+      <pubDate>Mon, 01 May 2023 04:00:00 GMT</pubDate>
+      
+        
+        
+      <description>&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\Kleinyc.github.io\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\Kleinyc.git</description>
+        
+      
+      
+      
+      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><p>本篇用于记录我在Autodesk学会了什么！</p><h1 id="业务理解"><a href="#业务理解" class="headerlink" title="业务理解"></a>业务理解</h1><h1 id="文档工作"><a href="#文档工作" class="headerlink" title="文档工作"></a>文档工作</h1><h1 id="技术学习"><a href="#技术学习" class="headerlink" title="技术学习"></a>技术学习</h1><h1 id="未来路径"><a href="#未来路径" class="headerlink" title="未来路径"></a>未来路径</h1>]]></content:encoded>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%AE%9E%E4%B9%A0/">实习</category>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
+      
+      
+      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2023/05/01/master_internship_study/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Technical Writer</title>
+      <link>https://github.com/Kleinyc/Kleinyc.github.io/2023/04/30/technical_writer/</link>
+      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2023/04/30/technical_writer/</guid>
+      <pubDate>Sun, 30 Apr 2023 09:26:01 GMT</pubDate>
+      
+      <description>&lt;hr&gt;
+&lt;h1 id=&quot;What-is-a-technical-writer&quot;&gt;&lt;a href=&quot;#What-is-a-technical-writer&quot; class=&quot;headerlink&quot; title=&quot;What is a technical writer?&quot;&gt;&lt;/a&gt;What is a technical writer?&lt;/h1&gt;&lt;p&gt;A technical writer is a professional who creates technical documentation and materials, such as user manuals, installation guides, help files, tutorials, and white papers, among others. Technical writers are typically responsible for producing clear, concise, and accurate content that explains complex technical concepts and procedures in a way that is easy for the intended audience to understand.&lt;/p&gt;
+&lt;p&gt;Technical writers work in a wide variety of industries, including technology, healthcare, manufacturing, and finance. They often collaborate closely with subject matter experts (SMEs), such as engineers, developers, and product managers, to ensure that the documentation they produce is accurate and up-to-date. Technical writers may also work closely with designers and editors to ensure that the documentation is visually appealing and engaging.&lt;/p&gt;
+&lt;p&gt;To become a technical writer, individuals typically need a strong command of written and verbal communication, as well as a good understanding of technology and technical concepts. Many technical writers have backgrounds in engineering, computer science, or a related field, although some have degrees in communications, journalism, or English. Additionally, technical writers need to be skilled in organizing and presenting information, as well as in using specialized tools and software to create and publish documentation.&lt;/p&gt;
+&lt;p&gt;非常有幸在Autodesk进行technical writer这一岗位的实习。其实在我投递这个岗位之前并不清楚这个岗位到底要做什么，之前也没有想过自己会在这个领域工作。但阴差阳错开始的这段实习让我学会了很多，了解了很多，同时也收获了很多。&lt;/p&gt;
+&lt;p&gt;本篇就是为了说明一下该岗位的日常工作包含哪些，同时也梳理一下这四个月里我学到了哪些知识。&lt;/p&gt;
+&lt;h1 id=&quot;如何定义这份工作？&quot;&gt;&lt;a href=&quot;#如何定义这份工作？&quot; class=&quot;headerlink&quot; title=&quot;如何定义这份工作？&quot;&gt;&lt;/a&gt;如何定义这份工作？&lt;/h1&gt;&lt;p&gt;在此说明，technical writer和technical communication在同一领域，TC沪联针对技术传播做了下图的总结，我觉得很清晰，在此引用一下。&lt;/p&gt;
+&lt;center&gt;
+&lt;img src=&quot;http://www.technicalwriter.cn/blog/upload/0.jpg&quot; alt title=&quot;technical writer&quot; style=&quot;text-align: center; color: rgb(0, 0, 0); font-family: Arial, Verdana, sans-serif; font-size: 12px;&quot;&gt;
+&lt;/center&gt;</description>
+      
+      
+      
+      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><h1 id="What-is-a-technical-writer"><a href="#What-is-a-technical-writer" class="headerlink" title="What is a technical writer?"></a>What is a technical writer?</h1><p>A technical writer is a professional who creates technical documentation and materials, such as user manuals, installation guides, help files, tutorials, and white papers, among others. Technical writers are typically responsible for producing clear, concise, and accurate content that explains complex technical concepts and procedures in a way that is easy for the intended audience to understand.</p><p>Technical writers work in a wide variety of industries, including technology, healthcare, manufacturing, and finance. They often collaborate closely with subject matter experts (SMEs), such as engineers, developers, and product managers, to ensure that the documentation they produce is accurate and up-to-date. Technical writers may also work closely with designers and editors to ensure that the documentation is visually appealing and engaging.</p><p>To become a technical writer, individuals typically need a strong command of written and verbal communication, as well as a good understanding of technology and technical concepts. Many technical writers have backgrounds in engineering, computer science, or a related field, although some have degrees in communications, journalism, or English. Additionally, technical writers need to be skilled in organizing and presenting information, as well as in using specialized tools and software to create and publish documentation.</p><p>非常有幸在Autodesk进行technical writer这一岗位的实习。其实在我投递这个岗位之前并不清楚这个岗位到底要做什么，之前也没有想过自己会在这个领域工作。但阴差阳错开始的这段实习让我学会了很多，了解了很多，同时也收获了很多。</p><p>本篇就是为了说明一下该岗位的日常工作包含哪些，同时也梳理一下这四个月里我学到了哪些知识。</p><h1 id="如何定义这份工作？"><a href="#如何定义这份工作？" class="headerlink" title="如何定义这份工作？"></a>如何定义这份工作？</h1><p>在此说明，technical writer和technical communication在同一领域，TC沪联针对技术传播做了下图的总结，我觉得很清晰，在此引用一下。</p><center><img src="http://www.technicalwriter.cn/blog/upload/0.jpg" alt title="technical writer" style="text-align: center; color: rgb(0, 0, 0); font-family: Arial, Verdana, sans-serif; font-size: 12px;"></center><span id="more"></span><p>而我的日常工作主要围绕在以下五个方面：</p><ul><li>开发生产</li><li>跟踪反馈</li><li>售后服务</li><li>产品使用</li><li>产品实施</li></ul><h2 id="开发生产"><a href="#开发生产" class="headerlink" title="开发生产"></a>开发生产</h2><p>Technical writer也有更细的任务分工，作为Autodesk ACS部门 Cost Management Team的TW，我第一项任务就是满足内部用户对产品功能和服务内容的信息需求，主要就是API的说明文档。产品内部是基于Swagger框架进行API设计、构建、记录和测试的。</p><p><code>Swagger is an open-source software framework that is used to design, build, document, and test RESTful APIs. It provides a set of tools for developers to create standardized API documentation that is easy to read, understand, and consume.</code></p><p>实习的第一件事就是学习！快速学习！相比于开发，许多业务场景要更难理解一些，只有理解了业务，才能更好的使用API并进行产品的开发生产工作。</p><p>而API文档的开发就是完善使用说明，修正变量描述等。</p><p>需要学会的技能有：</p><ul><li>API测试 -&gt; 一般使用postman进行测试</li><li>Git与GitHub</li><li>swagger</li><li>熟悉一些pipeline的流程</li></ul><p>以一个API为例：</p><p><code>GET schedule-of-values</code></p><p>这个API主要功能是检索contracts中的详细信息，我们需要对这个API进行测试，发现它的Query、response对比现有的文档有一些差异</p><ol><li>filter[contractId] and filter[budgetId] don’t work with blank, has to be uuid.</li><li>if the parameter value is not in correct format, input “FALSE” for a boolean type will return error as  follow, would suggest to specify which parameter is not correct to help developer quick identify the issue.</li><li>for boolean type, only low-case is supported, will False be supported for example? If not, make it clear in Doc to avoid confusion.</li><li>filter[isRoot] does not work with false, sub sovs are not listed.</li><li>include:  can not have any space within the parameters, and if input value is wrong, there is no error message complaining this, suggest to have a check for the value.</li><li>internalLimit: this is only for internal usage, why not hidden from public doc?</li><li>q: remove from doc if this is deprecated.Response:</li><li>containerId: in response for ACC endpoints, needs to remove to avoid confusion.<br>sort: this even works with for example “amount    +afa - + desc”, what is the format here? need be clear in Doc.</li><li>sort: this even works with for example “amount    +afa - + desc”, what is the format here? need be clear in Doc.</li></ol><p>然后就需要和开发进行沟通，确认这些测试的结果是否是现在预期的。如果不是预期的，就需要针对问题分别提ticket，然后进行修复，如果符合预期，那就得修改文档。</p><p>测试过程中还要书写测试用例，确定各个使用场景的输入和输出。</p><h2 id="跟踪反馈"><a href="#跟踪反馈" class="headerlink" title="跟踪反馈"></a>跟踪反馈</h2><p>我们的API开发好之后，部分API会public给我们的客户，文档的public就需要跟踪反馈。我们的文档如果public出去，就需要forge团队的同事进行review，他们会有一些问题需要开发团队解答，此时，就是我的工作了。由于forge团队的同事不可能知道每个API开发人员是谁，所以我就需要去跟踪他们的review并针对他们的问题向我们的开发同事进行询问，然后给出合理的解答，这个也会持续改进API。</p><h2 id="售后服务"><a href="#售后服务" class="headerlink" title="售后服务"></a>售后服务</h2><p>当我们的API公开出去后，客户就会针对他们的业务进行使用进行二次开发。在Cost Management这个产品中，我们的客户往往需要一些获取一些信息并连接到企业的ERP系统，有时候他们会对response的结果产生疑问，例如我们在Query中有一个参数是 <code>include</code>, <code>include=budget</code>意思是在获取信息时，包含链接的<code>budget</code>信息。有时候用户不清楚，当销售部门也不清楚时就会转到开发部门，我们就需要进一步解答。如果客户有一些其他需要也会找我们的Product Owner， PO可能会来问我。</p><h2 id="产品使用"><a href="#产品使用" class="headerlink" title="产品使用"></a>产品使用</h2><p>产品使用和售后服务类似，不过我们是主导方，我们开发出来的文档就是产品使用说明书。</p><h2 id="产品实施"><a href="#产品实施" class="headerlink" title="产品实施"></a>产品实施</h2><p>和产品使用有一些重合，主要对接客户的开发人员。</p><p>图中的其他工作内容会根据部门&#x2F;团队的不同有所出入。</p><h1 id="这份工作的体验如何？"><a href="#这份工作的体验如何？" class="headerlink" title="这份工作的体验如何？"></a>这份工作的体验如何？</h1><p>技术写作的工作体验因公司和行业而异，但一般来说，技术写作是一个需要高度专业化和细致耐心的工作。以下是我的一些工作体验：</p><ol><li><p>责任感：技术写作通常是一个高度负责的工作，因为它需要确保文档的准确性和及时性。技术写作人员需要与开发人员、测试人员等相关人员合作，以确保文档与最新产品版本保持同步。</p></li><li><p>细心耐心：技术写作需要耐心和细心，因为需要对技术细节进行深入了解，并以清晰和易于理解的方式表达出来。此外，技术写作还需要处理大量的信息和细节，以确保文档的准确性和完整性。</p></li><li><p>团队合作：技术写作往往需要与其他团队成员合作，如开发人员、测试人员、产品经理等。技术写作人员需要建立有效的沟通和协作渠道，以确保文档准确反映产品的特点和功能。</p></li><li><p>专业知识：技术写作需要具备深入的技术知识，以便能够有效地沟通和描述技术细节。技术写作人员需要不断学习和保持对技术的了解，以确保文档始终与产品保持同步。</p></li><li><p>多任务处理：技术写作需要同时处理多个任务和文档，包括用户手册、安装指南、故障排除文档等等。技术写作人员需要有能力管理多个项目和任务，并确保按时完成文档。</p></li></ol><p>总的来说，技术写作是一个具有挑战性的工作，需要对技术和写作都有深入的了解，以便为用户提供清晰和易于理解的文档。虽然技术写作需要投入大量的精力和时间，但对于喜欢写作和对技术感兴趣的人来说，这可能是一个极具成就感的职业。</p><h1 id="Technical-Writer-x2F-Communication-学习资源"><a href="#Technical-Writer-x2F-Communication-学习资源" class="headerlink" title="Technical Writer&#x2F;Communication 学习资源"></a>Technical Writer&#x2F;Communication 学习资源</h1><h2 id="公众号："><a href="#公众号：" class="headerlink" title="公众号："></a>公众号：</h2><ul><li>infomagic技术传播与技术写作</li><li>技术传播那些事</li></ul><h2 id="website："><a href="#website：" class="headerlink" title="website："></a>website：</h2><ul><li><a href="https://github.com/lilin90/awesome-technical-communication">https://github.com/lilin90/awesome-technical-communication</a></li><li><a href="https://www.jianshu.com/u/77358f1c74b3">https://www.jianshu.com/u/77358f1c74b3</a></li></ul><p>资源网络上有很多，作为技术写作和技术传播的从业人员，快速学习能力和信息检索能力是最重要的两个。</p>]]></content:encoded>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%AE%9E%E4%B9%A0/">实习</category>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
+      
+      
+      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2023/04/30/technical_writer/#disqus_thread</comments>
+      
+    </item>
+    
+    <item>
+      <title>Paper instruction &amp;&amp; Bert use</title>
+      <link>https://github.com/Kleinyc/Kleinyc.github.io/2023/03/28/bert/</link>
+      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2023/03/28/bert/</guid>
+      <pubDate>Tue, 28 Mar 2023 04:00:00 GMT</pubDate>
+      
+      <description>&lt;hr&gt;
+&lt;p&gt;本项目采用transformers模块，使用bert-base-chinese模型实现文本多分类。&lt;/p&gt;
+&lt;p&gt;Github link will update.&lt;/p&gt;
+&lt;h3 id=&quot;维护者&quot;&gt;&lt;a href=&quot;#维护者&quot; class=&quot;headerlink&quot; title=&quot;维护者&quot;&gt;&lt;/a&gt;维护者&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;Klein &lt;/li&gt;
+&lt;li&gt;&lt;/li&gt;&lt;/ul&gt;</description>
+      
+      
+      
+      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><p>本项目采用transformers模块，使用bert-base-chinese模型实现文本多分类。</p><p>Github link will update.</p><h3 id="维护者"><a href="#维护者" class="headerlink" title="维护者"></a>维护者</h3><ul><li>Klein </li><li><span id="more"></span></li></ul><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><ul><li>Survey Data</li></ul><p>We gathered data from a leading online medical platform in China. </p><h3 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h3><p>运行环境：</p><ul><li>Python: 3.7.9</li><li>Cuda: 10.2</li><li>Cudnn: 7.6.5</li><li>Tensorflow: 2.3.2</li></ul><p>其余第三方模块见requirements.txt.</p><p>代码结构如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── bert-base-chinese（transformers提供的BERT中文预训练模型）</span><br><span class="line">│   ├── config.json</span><br><span class="line">│   ├── tf_model.h5</span><br><span class="line">│   ├── tokenizer_config.json</span><br><span class="line">│   ├── tokenizer.json</span><br><span class="line">│   └── vocab.txt</span><br><span class="line">├── data（数据集）</span><br><span class="line">│   └── sougou_mini</span><br><span class="line">│       ├── test.csv</span><br><span class="line">│       └── train.csv</span><br><span class="line">├── model_predict.py（模型预测脚本）</span><br><span class="line">├── model_train.py（模型训练脚本）</span><br><span class="line">├── model_evaluate.py（模型评估脚本）</span><br><span class="line">├── survey_mini_cls.h5（保存模型）</span><br><span class="line">├── survey_mini_label.json（数据集分类标签）</span><br><span class="line">└── util.py（配置脚本）</span><br></pre></td></tr></table></figure><h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><ul><li>预训练模型：bert-base-chinese</li><li>多分类模型：TFBertForSequenceClassification</li></ul><h3 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h3><ul><li>survey</li></ul><h3 id="项目启动"><a href="#项目启动" class="headerlink" title="项目启动"></a>项目启动</h3><ol><li>将BERT中文预训练模型tf_model.h5放在bert-base-chinese文件夹下</li><li>所需Python第三方模块参考requirements.txt文档</li><li>自己需要分类的数据按照data&#x2F;sougou_mini的格式准备好</li><li>调整模型参数，运行model_train.py进行模型训练</li><li>运行model_evaluate.py进行模型评估</li><li>运行model_predict.py对新文本进行评估</li></ol><h3 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h3><ol><li>Text classification with transformers in Tensorflow 2: BERT, XLNet: <a href="https://atheros.ai/blog/text-classification-with-transformers-in-tensorflow-2">https://atheros.ai/blog/text-classification-with-transformers-in-tensorflow-2</a></li><li>tensorflow 2.0+ 基于BERT模型的文本分类: <a href="https://zhuanlan.zhihu.com/p/199238483?utm_source=wechat_session">https://zhuanlan.zhihu.com/p/199238483?utm_source=wechat_session</a></li><li>HUGGING FACE: <a href="https://huggingface.co/models">https://huggingface.co/models</a></li></ol>]]></content:encoded>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/">大学</category>
+      
+      
+      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
+      
+      
+      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2023/03/28/bert/#disqus_thread</comments>
+      
+    </item>
     
     <item>
       <title>年轻人租房那点事</title>
@@ -190,116 +303,6 @@
       
       
       <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/08/Harbin/#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>LLM Finetune &amp;&amp; Prompt engineering</title>
-      <link>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/LLM_GPT/</link>
-      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/LLM_GPT/</guid>
-      <pubDate>Sun, 01 May 2022 04:00:00 GMT</pubDate>
-      
-        
-        
-      <description>&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\Kleinyc.github.io\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\Kleinyc.git</description>
-        
-      
-      
-      
-      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><h1 id="From-our-previous-discussion-about-GPT-finetune-we-decide-to-do-two-aspects-of-work"><a href="#From-our-previous-discussion-about-GPT-finetune-we-decide-to-do-two-aspects-of-work" class="headerlink" title="From our previous discussion about GPT-finetune, we decide to do two aspects of work."></a>From our previous discussion about GPT-finetune, we decide to do two aspects of work.</h1><ol><li>Using a spider to crawl some QA dataset → Based on llama&#x2F;other_gpt_model to do finetune.</li><li>Set up a UI based on the released GPT model and use a prompt to teach the model some knowledge → QA</li></ol><h2 id="Task-1"><a href="#Task-1" class="headerlink" title="Task 1"></a>Task 1</h2><p>Spider website link:</p><p><a href="https://forums.autodesk.com/t5/bim-360-support/bd-p/183">https://forums.autodesk.com/t5/bim-360-support/bd-p/183</a></p><p>Spider Code:</p><p>test_qa_bim360.py[will create a github repo]</p><p>Dataset:</p><p>output_file.json</p><p>GPT_Model:</p><p>tloen&#x2F;alpaca-lora: Instruct-tune LLaMA on consumer hardware (github.com)</p><p>Result:</p><p>torch.cuda.OutOfMemoryError: CUDA out of memory.</p><p>We need a high GPU need. At least 24GB like nvidia-3090Ti.</p><h2 id="Task-2"><a href="#Task-2" class="headerlink" title="Task 2"></a>Task 2</h2><p>Chinese-English model try:</p><p>Based on local knowledge dataset ChatGLM-6B. The basic theory as follows:</p><p>The process includes loading files -&gt; reading text -&gt; text segmentation -&gt; text vectorization -&gt; question vectorization -&gt; matching the top k most similar to the question vector in the text vector -&gt; matching the text as the context Add it to the prompt with the question -&gt; Submit to LLM to generate the answer.</p><p>I have set up a webui to do a test, conclusion is same as the project owner write → <a href="https://www.heywhale.com/mw/project/643977aa446c45f4592a1e59">https://www.heywhale.com/mw/project/643977aa446c45f4592a1e59</a>.</p><p>After discussion with Jason, we think we can try to use our open dataset and use some open model UI in colab to test if it’s OK.</p><p>If the result is OK, we may apply to use a high performance machine to iterate.</p>]]></content:encoded>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/">大学</category>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
-      
-      
-      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/LLM_GPT/#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>Paper instruction &amp;&amp; Bert use</title>
-      <link>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/bert/</link>
-      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/bert/</guid>
-      <pubDate>Sun, 01 May 2022 04:00:00 GMT</pubDate>
-      
-        
-        
-      <description>&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\Kleinyc.github.io\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\Kleinyc.git</description>
-        
-      
-      
-      
-      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><p>本项目采用transformers模块，使用bert-base-chinese模型实现文本多分类。</p><p>Github link will update.</p><h3 id="维护者"><a href="#维护者" class="headerlink" title="维护者"></a>维护者</h3><ul><li>Klein</li></ul><h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><ul><li>Survey Data</li></ul><p>We gathered data from a leading online medical platform in China. </p><h3 id="代码结构"><a href="#代码结构" class="headerlink" title="代码结构"></a>代码结构</h3><p>运行环境：</p><ul><li>Python: 3.7.9</li><li>Cuda: 10.2</li><li>Cudnn: 7.6.5</li><li>Tensorflow: 2.3.2</li></ul><p>其余第三方模块见requirements.txt.</p><p>代码结构如下：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── bert-base-chinese（transformers提供的BERT中文预训练模型）</span><br><span class="line">│   ├── config.json</span><br><span class="line">│   ├── tf_model.h5</span><br><span class="line">│   ├── tokenizer_config.json</span><br><span class="line">│   ├── tokenizer.json</span><br><span class="line">│   └── vocab.txt</span><br><span class="line">├── data（数据集）</span><br><span class="line">│   └── sougou_mini</span><br><span class="line">│       ├── test.csv</span><br><span class="line">│       └── train.csv</span><br><span class="line">├── model_predict.py（模型预测脚本）</span><br><span class="line">├── model_train.py（模型训练脚本）</span><br><span class="line">├── model_evaluate.py（模型评估脚本）</span><br><span class="line">├── survey_mini_cls.h5（保存模型）</span><br><span class="line">├── survey_mini_label.json（数据集分类标签）</span><br><span class="line">└── util.py（配置脚本）</span><br></pre></td></tr></table></figure><h3 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h3><ul><li>预训练模型：bert-base-chinese</li><li>多分类模型：TFBertForSequenceClassification</li></ul><h3 id="模型评估"><a href="#模型评估" class="headerlink" title="模型评估"></a>模型评估</h3><ul><li>survey</li></ul><h3 id="项目启动"><a href="#项目启动" class="headerlink" title="项目启动"></a>项目启动</h3><ol><li>将BERT中文预训练模型tf_model.h5放在bert-base-chinese文件夹下</li><li>所需Python第三方模块参考requirements.txt文档</li><li>自己需要分类的数据按照data&#x2F;sougou_mini的格式准备好</li><li>调整模型参数，运行model_train.py进行模型训练</li><li>运行model_evaluate.py进行模型评估</li><li>运行model_predict.py对新文本进行评估</li></ol><h3 id="参考网址"><a href="#参考网址" class="headerlink" title="参考网址"></a>参考网址</h3><ol><li>Text classification with transformers in Tensorflow 2: BERT, XLNet: <a href="https://atheros.ai/blog/text-classification-with-transformers-in-tensorflow-2">https://atheros.ai/blog/text-classification-with-transformers-in-tensorflow-2</a></li><li>tensorflow 2.0+ 基于BERT模型的文本分类: <a href="https://zhuanlan.zhihu.com/p/199238483?utm_source=wechat_session">https://zhuanlan.zhihu.com/p/199238483?utm_source=wechat_session</a></li><li>HUGGING FACE: <a href="https://huggingface.co/models">https://huggingface.co/models</a></li></ol>]]></content:encoded>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%A4%A7%E5%AD%A6/">大学</category>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
-      
-      
-      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/bert/#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>Autodesk Internship</title>
-      <link>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/master_internship_study/</link>
-      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/master_internship_study/</guid>
-      <pubDate>Sun, 01 May 2022 04:00:00 GMT</pubDate>
-      
-        
-        
-      <description>&lt;link rel=&quot;stylesheet&quot; class=&quot;aplayer-secondary-style-marker&quot; href=&quot;\Kleinyc.github.io\assets\css\APlayer.min.css&quot;&gt;&lt;script src=&quot;\Kleinyc.git</description>
-        
-      
-      
-      
-      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><p>本篇用于记录我在Autodesk学会了什么！</p><h1 id="业务理解"><a href="#业务理解" class="headerlink" title="业务理解"></a>业务理解</h1><h1 id="文档工作"><a href="#文档工作" class="headerlink" title="文档工作"></a>文档工作</h1><h1 id="技术学习"><a href="#技术学习" class="headerlink" title="技术学习"></a>技术学习</h1><h1 id="未来路径"><a href="#未来路径" class="headerlink" title="未来路径"></a>未来路径</h1>]]></content:encoded>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%AE%9E%E4%B9%A0/">实习</category>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
-      
-      
-      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/05/01/master_internship_study/#disqus_thread</comments>
-      
-    </item>
-    
-    <item>
-      <title>Technical Writer</title>
-      <link>https://github.com/Kleinyc/Kleinyc.github.io/2022/04/30/technical_writer/</link>
-      <guid>https://github.com/Kleinyc/Kleinyc.github.io/2022/04/30/technical_writer/</guid>
-      <pubDate>Sat, 30 Apr 2022 09:26:01 GMT</pubDate>
-      
-      <description>&lt;hr&gt;
-&lt;h1 id=&quot;What-is-a-technical-writer&quot;&gt;&lt;a href=&quot;#What-is-a-technical-writer&quot; class=&quot;headerlink&quot; title=&quot;What is a technical writer?&quot;&gt;&lt;/a&gt;What is a technical writer?&lt;/h1&gt;&lt;p&gt;A technical writer is a professional who creates technical documentation and materials, such as user manuals, installation guides, help files, tutorials, and white papers, among others. Technical writers are typically responsible for producing clear, concise, and accurate content that explains complex technical concepts and procedures in a way that is easy for the intended audience to understand.&lt;/p&gt;
-&lt;p&gt;Technical writers work in a wide variety of industries, including technology, healthcare, manufacturing, and finance. They often collaborate closely with subject matter experts (SMEs), such as engineers, developers, and product managers, to ensure that the documentation they produce is accurate and up-to-date. Technical writers may also work closely with designers and editors to ensure that the documentation is visually appealing and engaging.&lt;/p&gt;
-&lt;p&gt;To become a technical writer, individuals typically need a strong command of written and verbal communication, as well as a good understanding of technology and technical concepts. Many technical writers have backgrounds in engineering, computer science, or a related field, although some have degrees in communications, journalism, or English. Additionally, technical writers need to be skilled in organizing and presenting information, as well as in using specialized tools and software to create and publish documentation.&lt;/p&gt;
-&lt;p&gt;非常有幸在Autodesk进行technical writer这一岗位的实习。其实在我投递这个岗位之前并不清楚这个岗位到底要做什么，之前也没有想过自己会在这个领域工作。但阴差阳错开始的这段实习让我学会了很多，了解了很多，同时也收获了很多。&lt;/p&gt;
-&lt;p&gt;本篇就是为了说明一下该岗位的日常工作包含哪些，同时也梳理一下这四个月里我学到了哪些知识。&lt;/p&gt;
-&lt;h1 id=&quot;如何定义这份工作？&quot;&gt;&lt;a href=&quot;#如何定义这份工作？&quot; class=&quot;headerlink&quot; title=&quot;如何定义这份工作？&quot;&gt;&lt;/a&gt;如何定义这份工作？&lt;/h1&gt;&lt;p&gt;在此说明，technical writer和technical communication在同一领域，TC沪联针对技术传播做了下图的总结，我觉得很清晰，在此引用一下。&lt;/p&gt;
-&lt;center&gt;
-&lt;img src=&quot;http://www.technicalwriter.cn/blog/upload/0.jpg&quot; alt title=&quot;technical writer&quot; style=&quot;text-align: center; color: rgb(0, 0, 0); font-family: Arial, Verdana, sans-serif; font-size: 12px;&quot;&gt;
-&lt;/center&gt;</description>
-      
-      
-      
-      <content:encoded><![CDATA[<link rel="stylesheet" class="aplayer-secondary-style-marker" href="\Kleinyc.github.io\assets\css\APlayer.min.css"><script src="\Kleinyc.github.io\assets\js\APlayer.min.js" class="aplayer-secondary-script-marker"></script><hr><h1 id="What-is-a-technical-writer"><a href="#What-is-a-technical-writer" class="headerlink" title="What is a technical writer?"></a>What is a technical writer?</h1><p>A technical writer is a professional who creates technical documentation and materials, such as user manuals, installation guides, help files, tutorials, and white papers, among others. Technical writers are typically responsible for producing clear, concise, and accurate content that explains complex technical concepts and procedures in a way that is easy for the intended audience to understand.</p><p>Technical writers work in a wide variety of industries, including technology, healthcare, manufacturing, and finance. They often collaborate closely with subject matter experts (SMEs), such as engineers, developers, and product managers, to ensure that the documentation they produce is accurate and up-to-date. Technical writers may also work closely with designers and editors to ensure that the documentation is visually appealing and engaging.</p><p>To become a technical writer, individuals typically need a strong command of written and verbal communication, as well as a good understanding of technology and technical concepts. Many technical writers have backgrounds in engineering, computer science, or a related field, although some have degrees in communications, journalism, or English. Additionally, technical writers need to be skilled in organizing and presenting information, as well as in using specialized tools and software to create and publish documentation.</p><p>非常有幸在Autodesk进行technical writer这一岗位的实习。其实在我投递这个岗位之前并不清楚这个岗位到底要做什么，之前也没有想过自己会在这个领域工作。但阴差阳错开始的这段实习让我学会了很多，了解了很多，同时也收获了很多。</p><p>本篇就是为了说明一下该岗位的日常工作包含哪些，同时也梳理一下这四个月里我学到了哪些知识。</p><h1 id="如何定义这份工作？"><a href="#如何定义这份工作？" class="headerlink" title="如何定义这份工作？"></a>如何定义这份工作？</h1><p>在此说明，technical writer和technical communication在同一领域，TC沪联针对技术传播做了下图的总结，我觉得很清晰，在此引用一下。</p><center><img src="http://www.technicalwriter.cn/blog/upload/0.jpg" alt title="technical writer" style="text-align: center; color: rgb(0, 0, 0); font-family: Arial, Verdana, sans-serif; font-size: 12px;"></center><span id="more"></span><p>而我的日常工作主要围绕在以下五个方面：</p><ul><li>开发生产</li><li>跟踪反馈</li><li>售后服务</li><li>产品使用</li><li>产品实施</li></ul><h2 id="开发生产"><a href="#开发生产" class="headerlink" title="开发生产"></a>开发生产</h2><p>Technical writer也有更细的任务分工，作为Autodesk ACS部门 Cost Management Team的TW，我第一项任务就是满足内部用户对产品功能和服务内容的信息需求，主要就是API的说明文档。产品内部是基于Swagger框架进行API设计、构建、记录和测试的。</p><p><code>Swagger is an open-source software framework that is used to design, build, document, and test RESTful APIs. It provides a set of tools for developers to create standardized API documentation that is easy to read, understand, and consume.</code></p><p>实习的第一件事就是学习！快速学习！相比于开发，许多业务场景要更难理解一些，只有理解了业务，才能更好的使用API并进行产品的开发生产工作。</p><p>而API文档的开发就是完善使用说明，修正变量描述等。</p><p>需要学会的技能有：</p><ul><li>API测试 -&gt; 一般使用postman进行测试</li><li>Git与GitHub</li><li>swagger</li><li>熟悉一些pipeline的流程</li></ul><p>以一个API为例：</p><p><code>GET schedule-of-values</code></p><p>这个API主要功能是检索contracts中的详细信息，我们需要对这个API进行测试，发现它的Query、response对比现有的文档有一些差异</p><ol><li>filter[contractId] and filter[budgetId] don’t work with blank, has to be uuid.</li><li>if the parameter value is not in correct format, input “FALSE” for a boolean type will return error as  follow, would suggest to specify which parameter is not correct to help developer quick identify the issue.</li><li>for boolean type, only low-case is supported, will False be supported for example? If not, make it clear in Doc to avoid confusion.</li><li>filter[isRoot] does not work with false, sub sovs are not listed.</li><li>include:  can not have any space within the parameters, and if input value is wrong, there is no error message complaining this, suggest to have a check for the value.</li><li>internalLimit: this is only for internal usage, why not hidden from public doc?</li><li>q: remove from doc if this is deprecated.Response:</li><li>containerId: in response for ACC endpoints, needs to remove to avoid confusion.<br>sort: this even works with for example “amount    +afa - + desc”, what is the format here? need be clear in Doc.</li><li>sort: this even works with for example “amount    +afa - + desc”, what is the format here? need be clear in Doc.</li></ol><p>然后就需要和开发进行沟通，确认这些测试的结果是否是现在预期的。如果不是预期的，就需要针对问题分别提ticket，然后进行修复，如果符合预期，那就得修改文档。</p><p>测试过程中还要书写测试用例，确定各个使用场景的输入和输出。</p><h2 id="跟踪反馈"><a href="#跟踪反馈" class="headerlink" title="跟踪反馈"></a>跟踪反馈</h2><p>我们的API开发好之后，部分API会public给我们的客户，文档的public就需要跟踪反馈。我们的文档如果public出去，就需要forge团队的同事进行review，他们会有一些问题需要开发团队解答，此时，就是我的工作了。由于forge团队的同事不可能知道每个API开发人员是谁，所以我就需要去跟踪他们的review并针对他们的问题向我们的开发同事进行询问，然后给出合理的解答，这个也会持续改进API。</p><h2 id="售后服务"><a href="#售后服务" class="headerlink" title="售后服务"></a>售后服务</h2><p>当我们的API公开出去后，客户就会针对他们的业务进行使用进行二次开发。在Cost Management这个产品中，我们的客户往往需要一些获取一些信息并连接到企业的ERP系统，有时候他们会对response的结果产生疑问，例如我们在Query中有一个参数是 <code>include</code>, <code>include=budget</code>意思是在获取信息时，包含链接的<code>budget</code>信息。有时候用户不清楚，当销售部门也不清楚时就会转到开发部门，我们就需要进一步解答。如果客户有一些其他需要也会找我们的Product Owner， PO可能会来问我。</p><h2 id="产品使用"><a href="#产品使用" class="headerlink" title="产品使用"></a>产品使用</h2><p>产品使用和售后服务类似，不过我们是主导方，我们开发出来的文档就是产品使用说明书。</p><h2 id="产品实施"><a href="#产品实施" class="headerlink" title="产品实施"></a>产品实施</h2><p>和产品使用有一些重合，主要对接客户的开发人员。</p><p>图中的其他工作内容会根据部门&#x2F;团队的不同有所出入。</p><h1 id="这份工作的体验如何？"><a href="#这份工作的体验如何？" class="headerlink" title="这份工作的体验如何？"></a>这份工作的体验如何？</h1><p>技术写作的工作体验因公司和行业而异，但一般来说，技术写作是一个需要高度专业化和细致耐心的工作。以下是我的一些工作体验：</p><ol><li><p>责任感：技术写作通常是一个高度负责的工作，因为它需要确保文档的准确性和及时性。技术写作人员需要与开发人员、测试人员等相关人员合作，以确保文档与最新产品版本保持同步。</p></li><li><p>细心耐心：技术写作需要耐心和细心，因为需要对技术细节进行深入了解，并以清晰和易于理解的方式表达出来。此外，技术写作还需要处理大量的信息和细节，以确保文档的准确性和完整性。</p></li><li><p>团队合作：技术写作往往需要与其他团队成员合作，如开发人员、测试人员、产品经理等。技术写作人员需要建立有效的沟通和协作渠道，以确保文档准确反映产品的特点和功能。</p></li><li><p>专业知识：技术写作需要具备深入的技术知识，以便能够有效地沟通和描述技术细节。技术写作人员需要不断学习和保持对技术的了解，以确保文档始终与产品保持同步。</p></li><li><p>多任务处理：技术写作需要同时处理多个任务和文档，包括用户手册、安装指南、故障排除文档等等。技术写作人员需要有能力管理多个项目和任务，并确保按时完成文档。</p></li></ol><p>总的来说，技术写作是一个具有挑战性的工作，需要对技术和写作都有深入的了解，以便为用户提供清晰和易于理解的文档。虽然技术写作需要投入大量的精力和时间，但对于喜欢写作和对技术感兴趣的人来说，这可能是一个极具成就感的职业。</p><h1 id="Technical-Writer-x2F-Communication-学习资源"><a href="#Technical-Writer-x2F-Communication-学习资源" class="headerlink" title="Technical Writer&#x2F;Communication 学习资源"></a>Technical Writer&#x2F;Communication 学习资源</h1><h2 id="公众号："><a href="#公众号：" class="headerlink" title="公众号："></a>公众号：</h2><ul><li>infomagic技术传播与技术写作</li><li>技术传播那些事</li></ul><h2 id="website："><a href="#website：" class="headerlink" title="website："></a>website：</h2><ul><li><a href="https://github.com/lilin90/awesome-technical-communication">https://github.com/lilin90/awesome-technical-communication</a></li><li><a href="https://www.jianshu.com/u/77358f1c74b3">https://www.jianshu.com/u/77358f1c74b3</a></li></ul><p>资源网络上有很多，作为技术写作和技术传播的从业人员，快速学习能力和信息检索能力是最重要的两个。</p>]]></content:encoded>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/categories/%E5%AE%9E%E4%B9%A0/">实习</category>
-      
-      
-      <category domain="https://github.com/Kleinyc/Kleinyc.github.io/tags/%E6%8A%80%E6%9C%AF%E7%AF%87/">技术篇</category>
-      
-      
-      <comments>https://github.com/Kleinyc/Kleinyc.github.io/2022/04/30/technical_writer/#disqus_thread</comments>
       
     </item>
     
